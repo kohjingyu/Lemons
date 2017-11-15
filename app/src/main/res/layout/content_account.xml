@@ -4,24 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.kohjingyu.lemons.AccountActivity"
-    tools:showIn="@layout/app_bar_account">
+    tools:showIn="@layout/app_bar_account"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="88dp"
         android:layout_height="48dp"
+        android:onClick="logout"
         android:text="Logout"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="1dp"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="0dp"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="130dp"
+        android:layout_height="123dp"
+        app:srcCompat="@mipmap/ic_launcher_round"
+        tools:layout_editor_absoluteY="112dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/statsButton"
@@ -29,11 +37,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stats"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/leaderboardButton"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintLeft_toLeftOf="@+id/leaderboardButton" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardButton"
+        tools:layout_editor_absoluteX="207dp" />
 
     <Button
         android:id="@+id/shopButton"
@@ -41,13 +47,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Shop"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/friendsButton"
-        android:layout_marginStart="9dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintLeft_toRightOf="@+id/leaderboardButton"
-        android:layout_marginLeft="9dp" />
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/friendsButton"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/friendsButton" />
 
     <Button
         android:id="@+id/leaderboardButton"
@@ -55,25 +58,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Leaderboard"
-        android:layout_marginStart="86dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/friendsButton"
-        tools:layout_constraintBaseline_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="86dp" />
+        tools:layout_editor_absoluteY="356dp"
+        tools:layout_editor_absoluteX="192dp" />
 
     <Button
         android:id="@+id/friendsButton"
         android:onClick="loadFriends"
-        android:layout_width="wrap_content"
+        android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:text="Friends"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="@+id/shopButton"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="37dp"
-        app:layout_constraintLeft_toLeftOf="@+id/shopButton" />
+        app:layout_constraintTop_toTopOf="@+id/leaderboardButton"
+        android:layout_marginTop="0dp"
+        app:layout_constraintRight_toLeftOf="@+id/leaderboardButton"
+        android:layout_marginRight="16dp" />
 
 </android.support.constraint.ConstraintLayout>

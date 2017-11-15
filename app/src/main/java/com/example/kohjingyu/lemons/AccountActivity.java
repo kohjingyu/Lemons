@@ -87,6 +87,13 @@ public class AccountActivity extends AppCompatActivity
         return true;
     }
 
+    public void logout(View view) {
+        // TODO: Implement logout
+        Log.i("Lemons", "Logging out...");
+        Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+        AccountActivity.this.startActivity(intent);
+    }
+
     public void loadStats(View view) {
         Log.i("Lemons", "Loading stats");
         Intent intent = new Intent(AccountActivity.this, StatsActivity.class);
