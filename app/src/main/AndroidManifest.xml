@@ -25,13 +25,30 @@
         </activity>
         <activity
             android:name=".AccountActivity"
+            android:parentActivityName=".LoginActivity"
             android:label="@string/title_activity_account"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".StatsActivity" />
-        <activity android:name=".ShopActivity" />
-        <activity android:name=".LeaderboardActivity" />
-        <activity android:name=".FriendsActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".StatsActivity"
+            android:parentActivityName=".AccountActivity"/>
+        <activity android:name=".ShopActivity"
+            android:parentActivityName=".AccountActivity"/>
+        <activity android:name=".LeaderboardActivity"
+            android:parentActivityName=".AccountActivity"/>
+        <activity android:name=".FriendsActivity"
+            android:parentActivityName=".AccountActivity"/>
+        <activity android:name=".RegisterActivity"
+            android:parentActivityName=".LoginActivity" />
+        <activity android:name=".SearchableActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity android:name=".AddFriendsActivity"
+            android:parentActivityName=".FriendsActivity"/>
     </application>
 
 </manifest>
