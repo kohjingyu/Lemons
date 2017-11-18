@@ -15,9 +15,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class AccountActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static JSONObject userInfo = null;
+
+    TextView userNameText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,17 @@ public class AccountActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        String name = "";
+
+        try {
+            name = (String)userInfo.get("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        userNameText = (TextView)findViewById(R.id.userNameText);
+        userNameText.setText(name);
     }
 
     @Override

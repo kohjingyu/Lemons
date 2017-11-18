@@ -1,5 +1,6 @@
 package com.example.kohjingyu.lemons;
 
+import android.accounts.Account;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -53,8 +54,8 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -221,7 +222,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.length() > 4;
     }
 
     private boolean isPasswordValid(String password) {
@@ -341,7 +342,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 JSONObject postParams = new JSONObject();
                 postParams.put("username", mEmail);
                 postParams.put("password", mPassword);
-                System.out.println("Response: " + performPostCall("http://devostrum.no-ip.info:12345/user/authenticate", postParams));
+                String response = performPostCall("http://devostrum.no-ip.info:12345/user/authenticate", postParams);
+                JSONObject jsonObj = new JSONObject(response);
+                boolean success = (boolean)jsonObj.get("success");
+
+                if(success) {
+                    JSONObject userObj = (JSONObject) jsonObj.get("user");
+                    System.out.println("ID: " + userObj.get("id"));
+                    AccountActivity.userInfo = userObj;
+                    return true;
+                }
+                else {
+                    // TODO: Print error message
+                    String errorMessage = (String)jsonObj.get("message");
+                    System.out.println(errorMessage);
+                }
             }
             catch (JSONException ex) {
                 ex.printStackTrace();
@@ -354,13 +369,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
 
             // TODO: register the new account here.
             return false;
@@ -430,5 +445,41 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return response;
     }
 
+    public static String  performGetCall(String requestURL,
+                                          JSONObject getDataParams) {
+
+        URL url;
+        String response = "";
+        try {
+            url = new URL(requestURL);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            OutputStream os = conn.getOutputStream();
+            os.close();
+            int responseCode=conn.getResponseCode();
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                String line;
+                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line=br.readLine()) != null) {
+                    response += line;
+                }
+            }
+            else {
+                response = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
 }
 
