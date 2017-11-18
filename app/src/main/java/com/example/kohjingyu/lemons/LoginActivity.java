@@ -16,6 +16,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+//import com.loopj.android.http.*;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -30,8 +32,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -315,6 +338,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
+                JSONObject postParams = new JSONObject();
+                postParams.put("username", mEmail);
+                postParams.put("password", mPassword);
+                System.out.println("Response: " + performPostCall("http://devostrum.no-ip.info:12345/user/authenticate", postParams));
+            }
+            catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+
+            try {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -354,5 +387,48 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+
+    public static String  performPostCall(String requestURL,
+                                          JSONObject postDataParams) {
+
+        URL url;
+        String response = "";
+        try {
+            url = new URL(requestURL);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(postDataParams.toString());
+            writer.flush();
+            writer.close();
+            os.close();
+            int responseCode=conn.getResponseCode();
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                String line;
+                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line=br.readLine()) != null) {
+                    response += line;
+                }
+            }
+            else {
+                response = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
 }
 
