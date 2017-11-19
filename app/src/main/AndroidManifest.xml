@@ -37,7 +37,7 @@
         </activity>
         <activity android:name=".StatsActivity"
             android:parentActivityName=".AccountActivity"/>
-        <activity android:name=".ShopActivity"
+        <activity android:name=".shop.ShopActivity"
             android:parentActivityName=".AccountActivity"/>
         <activity android:name=".LeaderboardActivity"
             android:parentActivityName=".AccountActivity"/>
