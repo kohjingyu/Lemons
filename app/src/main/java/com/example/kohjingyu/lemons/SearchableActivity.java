@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Iterator;
 /*
 Activity for searching
  */
@@ -74,6 +76,23 @@ public class SearchableActivity extends ListActivity {
 
     }
 
+    private String generateGetRequestURL(JSONObject getParams){
+        String requestURL = "http://devostrum.no-ip.info:12345/user?";
+        Iterator<String> jsonIterator = getParams.keys();
+        try {
+            while (jsonIterator.hasNext()) {
+                String key = jsonIterator.next();
+                requestURL += key + "=" + getParams.get(key);
+                if (jsonIterator.hasNext()) {
+                    requestURL += "&";
+                }
+            }
+        } catch (JSONException ex){
+            ex.printStackTrace();
+        }
+        return requestURL;
+    }
+
     private class GetDataFromServerTask extends AsyncTask<String, Void, Boolean>{
 
 
@@ -82,7 +101,8 @@ public class SearchableActivity extends ListActivity {
             try {
                 JSONObject getParams = new JSONObject();
                 getParams.put("userId",strings[0]);
-                String response = LoginActivity.performGetCall("http://devostrum.no-ip.info:12345/user", getParams);
+                String requestURL = generateGetRequestURL(getParams);
+                String response = LoginActivity.performGetCall(requestURL);
                 Log.i("login", response);
                 JSONObject jsonObj = new JSONObject(response);
                 boolean success = (boolean)jsonObj.get("success");

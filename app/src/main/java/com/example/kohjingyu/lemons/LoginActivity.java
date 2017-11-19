@@ -40,7 +40,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -436,22 +435,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return response;
     }
 
-    public static String  performGetCall(String requestURL,
-                                          JSONObject getDataParams) {
-
+    public static String  performGetCall(String requestURL) {
         URL url;
-        requestURL += "?";
         String response = "";
-        Iterator<String> jsonIterator = getDataParams.keys();
-
         try {
-            while (jsonIterator.hasNext()){
-                String key = jsonIterator.next();
-                requestURL += key + "=" + getDataParams.get(key);
-                if (jsonIterator.hasNext()){
-                    requestURL += "&";
-                }
-            }
+
             url = new URL(requestURL);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -475,7 +463,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return response;
     }
 }

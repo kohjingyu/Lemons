@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.example.kohjingyu.lemons.R;
 
+import java.util.Map;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -22,6 +24,7 @@ public class EquipmentFragment extends Fragment {
     View view;
     EditText equipmentIdEditText;
     OnEquipmentSelectedListener mCallback;
+    Map<String,Integer> equipped;
 
     public interface OnEquipmentSelectedListener {
         public void addEquipmentToAvatar(String equipmentId);
