@@ -2,32 +2,20 @@ package com.example.kohjingyu.lemons;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import org.json.JSONException;
+import org.json.JSONObject;
 /*
 Activity for searching
  */
 
 public class SearchableActivity extends ListActivity {
-    final String query_BASE = "devostrum.no-ip.info:12345";
-    final String query_BODY = "user";
-    final String query_SCHEME = "http";
-
+    JSONObject userObj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,91 +24,97 @@ public class SearchableActivity extends ListActivity {
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())){
             String query = intent.getStringExtra(SearchManager.QUERY);
-            getDataFromServer(query);
+            GetDataFromServerTask getDataFromServerTask = new GetDataFromServerTask();
+            getDataFromServerTask.execute(query);
         }
 
 
     }
 
-    private URL buildUrl(String userId){ //build URL to search the database for user
-        URL searchURL = null;
-        Uri.Builder builder = new Uri.Builder();
-        userId.trim();
-        builder.scheme(query_SCHEME)
-                .encodedAuthority(query_BASE)
-                .appendPath(query_BODY)
-                .appendQueryParameter("userId", userId);
-
-        Uri uri = builder.build();
-        try {
-            searchURL = new URL(uri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return searchURL;
-    }
 
     //This method return the json string when given the server url
-    private static String getHttpURL(URL url){
-        InputStream inputStream;
-        String line;
-        String JSONoutput = "";
-        //TO DO 3.1 query the API with a URL
+//    private void getDataFromServer(String query){
+//        URL requestURL = buildUrl(query);
+//
+//        GetDataFromServerTask getDataFromServerTask;
+//
+//
+//        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+//
+//        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+//        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+//        boolean isWifi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+//
+//        if (true){
+//            Log.i("WIFI", "here");
+//            getDataFromServerTask = new GetDataFromServerTask();
+//            getDataFromServerTask.execute(requestURL); //To use the non-static method execute, intialise an instance of the static class
+//        } else {
+//            Toast.makeText(this,"not on wifi connection", Toast.LENGTH_SHORT).show();
+//        }
+//
+//
+//    }
+
+
+    private String[] generateJsonArray(JSONObject jsonObject){
+
+        String[] jsonArray = new String[3] ;
         try {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //open connection with server
-            conn.connect(); //connect to the server
-            int response = conn.getResponseCode(); //get the response to query
-            Log.i("URLResponse", "the response is " + response); //log it to the logcat
-            inputStream = conn.getInputStream();    //get input stream from server
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-            while ((line = reader.readLine()) != null){ //Write the JSON into a string
-                JSONoutput =  JSONoutput + line;
+            jsonArray[0] = (jsonObject.get("name").toString() + "\n" + jsonObject.get("username").toString() + "\n" + jsonObject.getString("email").toString());
+            jsonArray[1] = (jsonObject.get("name").toString() + "\n" + jsonObject.get("username").toString() + "\n" + jsonObject.getString("email").toString());
+            jsonArray[2] = (jsonObject.get("name").toString() + "\n" + jsonObject.get("username").toString() + "\n" + jsonObject.getString("email").toString());
+            return jsonArray;
+        } catch (JSONException ex){
+            ex.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+    private class GetDataFromServerTask extends AsyncTask<String, Void, Boolean>{
+
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            try {
+                JSONObject getParams = new JSONObject();
+                getParams.put("userId",strings[0]);
+                String response = LoginActivity.performGetCall("http://devostrum.no-ip.info:12345/user", getParams);
+                Log.i("login", response);
+                JSONObject jsonObj = new JSONObject(response);
+                boolean success = (boolean)jsonObj.get("success");
+
+                if(success) { //if success, set userobject to the user data
+                    userObj = (JSONObject) jsonObj.get("user");
+                    System.out.println("ID: " + userObj.get("id"));
+                    return true;
+                }
+                else {
+                    //TODO set textview to display message
+                    String errorMessage = (String)jsonObj.get("message");
+                    System.out.println(errorMessage);
+                    return false;
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+            return false;
 
-        return JSONoutput;
-    }
-
-    private void getDataFromServer(String query){
-        URL requestURL = buildUrl(query);
-
-        GetDataFromServerTask getDataFromServerTask;
-
-
-        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        boolean isWifi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
-
-        if (isWifi){
-            Log.i("WIFI", "here");
-            getDataFromServerTask = new GetDataFromServerTask();
-            getDataFromServerTask.execute(requestURL); //To use the non-static method execute, intialise an instance of the static class
-        } else {
-            Toast.makeText(this,"not on wifi connection", Toast.LENGTH_SHORT).show();
-        }
-
-
-    }
-
-    private static class GetDataFromServerTask extends AsyncTask<URL, Void, String>{
-
-
-        @Override
-        protected String doInBackground(URL... urls) {
-            URL url = urls[0];
-            Log.i("URL", url.toString());
-            String JsonResultString = getHttpURL(url);
-            return JsonResultString;
         }
 
         @Override
-        protected void onPostExecute(String jsonResultString){
-            Log.i("JSON", jsonResultString);
+        protected void onPostExecute(Boolean success){
+            if (success){
+                String[] jsonArray = generateJsonArray(userObj);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
+                        android.R.layout.simple_list_item_1, jsonArray);
+                setListAdapter(adapter);
+
+            }
         }
     }
 }
