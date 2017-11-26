@@ -1,28 +1,24 @@
 package com.example.kohjingyu.lemons;
 
-import android.accounts.Account;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
-//import com.loopj.android.http.*;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,28 +32,21 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-
 import static android.Manifest.permission.READ_CONTACTS;
+
+//import com.loopj.android.http.*;
 
 /**
  * A login screen that offers login via email/password.
@@ -337,6 +326,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 postParams.put("username", mUsername);
                 postParams.put("password", mPassword);
                 String response = performPostCall("http://devostrum.no-ip.info:12345/user/authenticate", postParams);
+                Log.i("login", response);
                 JSONObject jsonObj = new JSONObject(response);
                 boolean success = (boolean)jsonObj.get("success");
 
@@ -430,12 +420,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return response;
     }
 
-    public static String  performGetCall(String requestURL,
-                                          JSONObject getDataParams) {
-
+    public static String  performGetCall(String requestURL) {
         URL url;
         String response = "";
         try {
+
             url = new URL(requestURL);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -443,11 +432,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
-            conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-
-            OutputStream os = conn.getOutputStream();
-            os.close();
             int responseCode=conn.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
@@ -463,7 +448,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return response;
     }
 }
