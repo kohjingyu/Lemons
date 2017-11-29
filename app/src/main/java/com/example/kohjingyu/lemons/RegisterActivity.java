@@ -60,15 +60,18 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if(password.length() <= 4) {
+            passwordText.setError("Password must at least be 5 characters long.");
+            return;
+        }
+
+        // Register user on server side
         registerTask = new UserRegisterTask(email, password, username, displayName);
         registerTask.execute((Void) null);
 
         // TODO: Check if email is valid
         // TODO: Check if email/username is already taken
-        // TODO: Validate username length, password length
 
-        Log.i("Lemons", email);
-        // TODO: Register user on server side
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         RegisterActivity.this.startActivity(intent);
     }
