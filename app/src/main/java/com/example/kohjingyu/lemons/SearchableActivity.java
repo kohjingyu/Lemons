@@ -29,8 +29,6 @@ public class SearchableActivity extends ListActivity {
             GetDataFromServerTask getDataFromServerTask = new GetDataFromServerTask();
             getDataFromServerTask.execute(query);
         }
-
-
     }
 
 
@@ -102,7 +100,7 @@ public class SearchableActivity extends ListActivity {
                 JSONObject getParams = new JSONObject();
                 getParams.put("userId",strings[0]);
                 String requestURL = generateGetRequestURL(getParams);
-                String response = LoginActivity.performGetCall(requestURL);
+                String response = LoginActivity.performGetCall(requestURL, getParams);
                 Log.i("login", response);
                 JSONObject jsonObj = new JSONObject(response);
                 boolean success = (boolean)jsonObj.get("success");

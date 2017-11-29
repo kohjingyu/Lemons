@@ -418,7 +418,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return response;
     }
 
-    public static String  performGetCall(String requestURL) {
+    public static String  performGetCall(String requestURL, JSONObject getDataParams) {
         URL url;
         String response = "";
         try {
@@ -431,6 +431,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+//            OutputStream os = conn.getOutputStream();
+//            BufferedWriter writer = new BufferedWriter(
+//                    new OutputStreamWriter(os, "UTF-8"));
+//            writer.write(getDataParams.toString());
+//            writer.flush();
+//            writer.close();
+//            os.close();
+
             int responseCode=conn.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {

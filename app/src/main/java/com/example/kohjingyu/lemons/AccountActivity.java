@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kohjingyu.lemons.shop.ShopActivity;
 
@@ -112,9 +113,15 @@ public class AccountActivity extends AppCompatActivity
     }
 
     public void loadStats(View view) {
-        Log.i("Lemons", "Loading stats");
-        Intent intent = new Intent(AccountActivity.this, StatsActivity.class);
-        AccountActivity.this.startActivity(intent);
+        try {
+            Log.i("Lemons", "Loading stats");
+            Intent intent = new Intent(AccountActivity.this, StatsActivity.class);
+            intent.putExtra("userId", String.valueOf(userInfo.get("id")));
+            AccountActivity.this.startActivity(intent);
+        } catch (JSONException e) {
+            Toast.makeText(this, "Could not load stats. Please try again.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 
     public void loadShop(View view) {
