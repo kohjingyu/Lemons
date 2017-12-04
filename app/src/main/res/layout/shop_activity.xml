@@ -12,17 +12,26 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         android:orientation="vertical">
-        <TextView
+        <ImageView
             android:id="@+id/shop_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/shop"
-            android:layout_gravity="center"/>
+            android:src="@drawable/shopbar"
+            android:layout_gravity="center"
+            />
+
         <ImageView
             android:id="@+id/shop_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/placeholder"
+            android:src="@drawable/avatar"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/avatarName"
+            android:fontFamily="@font/AdobeGothicStd-Bold"
             android:layout_gravity="center"/>
     </LinearLayout>
     <FrameLayout
@@ -30,6 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
-        android:background="@color/colorPrimaryDark">
+        android:background="@drawable/woodblock">
     </FrameLayout>
 </LinearLayout>

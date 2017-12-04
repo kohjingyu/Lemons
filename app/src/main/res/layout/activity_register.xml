@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/lemonsbackground"
     tools:context="com.example.kohjingyu.lemons.RegisterActivity">
 
 
@@ -13,7 +14,8 @@
         android:onClick="changeImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:src="@drawable/avatar"
+        android:background="@android:color/transparent"/>
 
     <EditText
         android:id="@+id/usernameText"
@@ -55,10 +57,14 @@
         android:hint="Confirm Password"
         android:inputType="textPassword" />
 
-    <Button
+    <ImageButton
         android:id="@+id/registerButton"
-        android:onClick="register"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register" />
+        android:src="@drawable/registerbutton"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center"
+        android:onClick="register"
+        />
+
 </LinearLayout>
