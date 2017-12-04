@@ -2,6 +2,7 @@ package com.example.kohjingyu.lemons.shop;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ShopActivity extends AppCompatActivity
-        implements EquipmentFragment.OnEquipmentSelectedListener {
+        implements EquipmentFragment.OnEquipmentSelectedListener, ShopCloneFragment.OnFragmentInteractionListener {
     TextView shopTextView;
     ArrayList<String> equipped;
     ImageView avatarImageView;
@@ -70,6 +71,11 @@ public class ShopActivity extends AppCompatActivity
         }
         requestURL += frontURL += backURL;
         return requestURL;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        
     }
 
     public class UpdateAvatarTask extends AsyncTask<URL, Void, Bitmap> {
