@@ -54,8 +54,6 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".AddFriendsActivity"
-            android:parentActivityName=".FriendsActivity"/>
     </application>
 
 </manifest>
