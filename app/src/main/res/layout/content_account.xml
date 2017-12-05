@@ -15,16 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/activitybackground"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         />
-
-    <ImageButton
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="logout"
-        android:src="@drawable/signoutbutton"
-        android:layout_alignParentEnd="true"/>
 
     <ImageView
         android:id="@+id/avatar"
@@ -41,7 +33,6 @@
         android:layout_height="wrap_content"
         android:text="@string/avatarName"
         android:layout_above="@+id/space"
-        android:fontFamily="@font/adobe_gothic_bold"
         android:layout_centerHorizontal="true" />
 
     <Space
