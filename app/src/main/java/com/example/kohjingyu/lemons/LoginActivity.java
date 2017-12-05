@@ -341,7 +341,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 else {
                     String errorMessage = (String)jsonObj.get("message");
-                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
                     System.out.println(errorMessage);
                 }
             }

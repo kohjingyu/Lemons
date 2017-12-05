@@ -97,7 +97,7 @@ public class Player {
         return requestURL;
     }
 
-    public void setScores(JSONObject jsonObjectScores){
+    private void setScores(JSONObject jsonObjectScores){
         this.scores = new Scores(jsonObjectScores);
     }
 
@@ -175,6 +175,11 @@ public class Player {
         }
         public int getDiet() {
             return diet;
+        }
+
+        @Override
+        public String toString() {
+            return "Fitness: " + this.fitness + " Academics: " + this.academics + " Mental Wellness: " + this.mentalWellness + " Diet: " + this.diet;
         }
     }
 

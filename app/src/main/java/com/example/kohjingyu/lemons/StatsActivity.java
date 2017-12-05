@@ -22,9 +22,9 @@ public class StatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
-        int userId = Player.getPlayer().getId();
-        GetDataFromServerTask getDataFromServerTask = new GetDataFromServerTask();
-        getDataFromServerTask.execute(userId);
+        // Update the player scores
+        UpdateScores updateScoresTask = new UpdateScores();
+        updateScoresTask.execute(0);
     }
 
     public void updateStats() {
@@ -32,50 +32,11 @@ public class StatsActivity extends AppCompatActivity {
         System.out.println(scores);
     }
 
-    private String generateGetRequestURL(String requestURL, JSONObject getParams){
-        Iterator<String> jsonIterator = getParams.keys();
-        try {
-            while (jsonIterator.hasNext()) {
-                String key = jsonIterator.next();
-                requestURL += key + "=" + getParams.get(key);
-                if (jsonIterator.hasNext()) {
-                    requestURL += "&";
-                }
-            }
-        } catch (JSONException ex){
-            ex.printStackTrace();
-        }
-        return requestURL;
-    }
-
-    private class GetDataFromServerTask extends AsyncTask<Integer, Void, Boolean> {
+    private class UpdateScores extends AsyncTask<Integer, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Integer... params) {
-            try {
-                JSONObject getParams = new JSONObject();
-                getParams.put("userId", params[0]);
-
-                String requestURL = generateGetRequestURL("http://devostrum.no-ip.info:12345/score?", getParams);
-                String response = LoginActivity.performGetCall(requestURL, getParams);
-                JSONObject jsonObj = new JSONObject(response);
-                boolean success = (boolean) jsonObj.get("success");
-
-                if (success) {
-                    JSONObject userScores = jsonObj.getJSONObject("user");
-                    Player.getPlayer().setScores(userScores);
-
-
-                    return true;
-                } else {
-                    String errorMessage = (String) jsonObj.get("message");
-                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    return false;
-                }
-            } catch (JSONException ex) {
-                ex.printStackTrace();
-            }
-            return false;
-
+            Player.getPlayer().updateScores();
+            return true;
         }
 
         @Override
