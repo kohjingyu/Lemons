@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:background="@drawable/tabsbackground"
             app:tabMode="scrollable"/>
 
         <android.support.v4.view.ViewPager
@@ -24,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/shop_tabs_papa"
+            android:background="@drawable/woodblock"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </RelativeLayout>

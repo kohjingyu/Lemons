@@ -101,7 +101,7 @@ public class ShopActivity extends AppCompatActivity
             //TO DO 3.1b (if you wish) display the JSON result in a text view widget for verification purpose
 
             //TO DO 3.5 Assign it to the text view widget
-            avatarImageView = findViewById(R.id.shop_avatar);
+            avatarImageView = findViewById(R.id.avatar);
             avatarImageView.setImageBitmap(s);
         }
     }

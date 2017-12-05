@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:text="@string/avatarName"
         android:layout_above="@+id/space"
-        android:fontFamily="@font/AdobeGothicStd-Bold"
+        android:fontFamily="@font/adobe_gothic_bold"
         android:layout_centerHorizontal="true" />
 
     <Space

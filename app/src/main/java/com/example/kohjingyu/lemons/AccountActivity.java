@@ -50,7 +50,7 @@ public class AccountActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        userNameText = (TextView)findViewById(R.id.userNameText);
+        userNameText = (TextView)findViewById(R.id.username);
         userNameText.setText(name);
     }
 

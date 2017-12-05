@@ -23,7 +23,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:hint="username" />
+        android:hint="username"
+        android:background="@drawable/loginbutton"/>
 
     <EditText
         android:id="@+id/emailText"
