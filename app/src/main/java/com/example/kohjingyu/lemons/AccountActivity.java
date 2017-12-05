@@ -22,8 +22,6 @@ import org.json.JSONObject;
 
 public class AccountActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public static JSONObject userInfo = null;
-
     TextView userNameText;
 
     @Override
@@ -42,15 +40,9 @@ public class AccountActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        String name = "";
+        String name = Player.getPlayer().getName();
 
-        try {
-            name = (String)userInfo.get("name");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        userNameText = (TextView)findViewById(R.id.userNameText);
+        userNameText = (TextView)findViewById(R.id.username);
         userNameText.setText(name);
     }
 
@@ -106,22 +98,19 @@ public class AccountActivity extends AppCompatActivity
     }
 
     public void logout(View view) {
-        // TODO: Implement logout
         Log.i("Lemons", "Logging out...");
+
+        // Set Player singleton to null (logout)
+        Player.setPlayer(null);
+
         Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
         AccountActivity.this.startActivity(intent);
     }
 
     public void loadStats(View view) {
-        try {
-            Log.i("Lemons", "Loading stats");
-            Intent intent = new Intent(AccountActivity.this, StatsActivity.class);
-            intent.putExtra("userId", String.valueOf(userInfo.get("id")));
-            AccountActivity.this.startActivity(intent);
-        } catch (JSONException e) {
-            Toast.makeText(this, "Could not load stats. Please try again.", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        Log.i("Lemons", "Loading stats");
+        Intent intent = new Intent(AccountActivity.this, StatsActivity.class);
+        AccountActivity.this.startActivity(intent);
     }
 
     public void loadShop(View view) {

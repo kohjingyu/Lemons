@@ -5,31 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.kohjingyu.lemons.shop.ShopActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/activitybackground">
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
+        <ImageView
             android:id="@+id/shop_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/shop"
-            android:layout_gravity="center"/>
+            android:src="@drawable/shopbar"
+            android:layout_gravity="center"
+            />
+
         <ImageView
-            android:id="@+id/shop_avatar"
+            android:id="@+id/avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/placeholder"
+            android:src="@drawable/avatar"
             android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/avatarName"
+            android:fontFamily="@font/adobe_gothic_bold"
+            android:layout_gravity="center"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            />
     </LinearLayout>
-    <FrameLayout
+
+    <RelativeLayout
         android:id="@+id/shop_container_1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:background="@color/colorPrimaryDark">
-    </FrameLayout>
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
+
 </LinearLayout>
