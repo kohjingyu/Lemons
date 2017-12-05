@@ -22,8 +22,6 @@ import org.json.JSONObject;
 
 public class AccountActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public static JSONObject userInfo = null;
-
     TextView userNameText;
 
     @Override
@@ -42,13 +40,7 @@ public class AccountActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        String name = "";
-
-        try {
-            name = (String)userInfo.get("name");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String name = Player.getPlayer().getName();
 
         userNameText = (TextView)findViewById(R.id.userNameText);
         userNameText.setText(name);
@@ -113,15 +105,10 @@ public class AccountActivity extends AppCompatActivity
     }
 
     public void loadStats(View view) {
-        try {
-            Log.i("Lemons", "Loading stats");
-            Intent intent = new Intent(AccountActivity.this, StatsActivity.class);
-            intent.putExtra("userId", String.valueOf(userInfo.get("id")));
-            AccountActivity.this.startActivity(intent);
-        } catch (JSONException e) {
-            Toast.makeText(this, "Could not load stats. Please try again.", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        Log.i("Lemons", "Loading stats");
+        Intent intent = new Intent(AccountActivity.this, StatsActivity.class);
+        intent.putExtra("userId", Player.getPlayer().getId());
+        AccountActivity.this.startActivity(intent);
     }
 
     public void loadShop(View view) {

@@ -28,6 +28,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -330,13 +331,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 if(success) {
                     JSONObject userObj = (JSONObject) jsonObj.get("user");
-                    System.out.println("ID: " + userObj.get("id"));
-                    AccountActivity.userInfo = userObj;
+                    int id = (Integer)userObj.get("id");
+                    String email = (String)userObj.get("email");
+                    String name = (String)userObj.get("name");
+
+                    // Create a new player and pass it to the singleton
+                    Player newPlayer = new Player(id, name, mUsername, email);
+                    Player.setPlayer(newPlayer);
+
+//                    AccountActivity.userInfo = userObj;
                     return true;
                 }
                 else {
-                    // TODO: Print error message
                     String errorMessage = (String)jsonObj.get("message");
+                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
                     System.out.println(errorMessage);
                 }
             }
@@ -431,14 +439,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-
-//            OutputStream os = conn.getOutputStream();
-//            BufferedWriter writer = new BufferedWriter(
-//                    new OutputStreamWriter(os, "UTF-8"));
-//            writer.write(getDataParams.toString());
-//            writer.flush();
-//            writer.close();
-//            os.close();
 
             int responseCode=conn.getResponseCode();
 

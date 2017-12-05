@@ -20,15 +20,24 @@ import java.util.ArrayList;
 public class Player {
     private final String BASE_URL = "http://devostrum.no-ip.info:12345";
 
-    private String id;
+    private int id;
     private String name;
     private String username;
     private String email;
     private JSONArray friends;
     private ArrayList<PlayerActivity> playerActivities;
     private Scores scores;
+    private static Player player;
 
-    public String getId() {
+    public static Player getPlayer() {
+        return player;
+    }
+
+    public static void setPlayer(Player newPlayer) {
+        player = newPlayer;
+    }
+
+    public int getId() {
     return id;
     }
     public String getName() {
@@ -74,14 +83,14 @@ public class Player {
         this.scores = new Scores(jsonObjectScores);
     }
 
-    public Player(String id, String name, String username, String email){
+    public Player(int id, String name, String username, String email){
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
     }
 
-    public Player(String id, String name, String email,
+    public Player(int id, String name, String email,
                   JSONArray playerActivities, JSONArray friends, JSONObject scores){
         this.id = id;
         this.name = name;
