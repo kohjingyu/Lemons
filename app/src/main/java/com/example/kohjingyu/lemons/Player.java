@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by setia on 12/5/2017.
@@ -20,15 +21,24 @@ import java.util.ArrayList;
 public class Player {
     private final String BASE_URL = "http://devostrum.no-ip.info:12345";
 
-    private String id;
+    private int id;
     private String name;
     private String username;
     private String email;
     private JSONArray friends;
     private ArrayList<PlayerActivity> playerActivities;
     private Scores scores;
+    private static Player player;
 
-    public String getId() {
+    public static Player getPlayer() {
+        return player;
+    }
+
+    public static void setPlayer(Player newPlayer) {
+        player = newPlayer;
+    }
+
+    public int getId() {
     return id;
     }
     public String getName() {
@@ -70,18 +80,35 @@ public class Player {
         friends = jsonArrayFriends;
     }
 
+    private String generateGetScoreRequestURL(JSONObject getParams){
+        String requestURL = "http://devostrum.no-ip.info:12345/score?";
+        Iterator<String> jsonIterator = getParams.keys();
+        try {
+            while (jsonIterator.hasNext()) {
+                String key = jsonIterator.next();
+                requestURL += key + "=" + getParams.get(key);
+                if (jsonIterator.hasNext()) {
+                    requestURL += "&";
+                }
+            }
+        } catch (JSONException ex){
+            ex.printStackTrace();
+        }
+        return requestURL;
+    }
+
     private void setScores(JSONObject jsonObjectScores){
         this.scores = new Scores(jsonObjectScores);
     }
 
-    public Player(String id, String name, String username, String email){
+    public Player(int id, String name, String username, String email){
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
     }
 
-    public Player(String id, String name, String email,
+    public Player(int id, String name, String email,
                   JSONArray playerActivities, JSONArray friends, JSONObject scores){
         this.id = id;
         this.name = name;
@@ -91,7 +118,7 @@ public class Player {
         setScores(scores);
     }
 
-    private class PlayerActivity {
+    class PlayerActivity {
         private int activityId;
         private String activityType;
         private int score;
@@ -121,7 +148,7 @@ public class Player {
         }
     }
 
-    private class Scores {
+    class Scores {
         private int fitness;
         private int academics;
         private int mentalWellness;
@@ -148,6 +175,11 @@ public class Player {
         }
         public int getDiet() {
             return diet;
+        }
+
+        @Override
+        public String toString() {
+            return "Fitness: " + this.fitness + " Academics: " + this.academics + " Mental Wellness: " + this.mentalWellness + " Diet: " + this.diet;
         }
     }
 
