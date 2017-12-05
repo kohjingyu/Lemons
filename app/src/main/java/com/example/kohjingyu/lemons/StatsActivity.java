@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,15 +22,17 @@ public class StatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
-        Intent intent = getIntent();
-        String userId = intent.getStringExtra("userId");
-        System.out.println(userId);
+        int userId = Player.getPlayer().getId();
         GetDataFromServerTask getDataFromServerTask = new GetDataFromServerTask();
         getDataFromServerTask.execute(userId);
     }
 
-    private String generateGetRequestURL(JSONObject getParams){
-        String requestURL = "http://devostrum.no-ip.info:12345/activity?";
+    public void updateStats() {
+        Player.Scores scores = Player.getPlayer().getScores();
+        System.out.println(scores);
+    }
+
+    private String generateGetRequestURL(String requestURL, JSONObject getParams){
         Iterator<String> jsonIterator = getParams.keys();
         try {
             while (jsonIterator.hasNext()) {
@@ -44,24 +48,27 @@ public class StatsActivity extends AppCompatActivity {
         return requestURL;
     }
 
-    private class GetDataFromServerTask extends AsyncTask<String, Void, Boolean> {
+    private class GetDataFromServerTask extends AsyncTask<Integer, Void, Boolean> {
         @Override
-        protected Boolean doInBackground(String... strings) {
+        protected Boolean doInBackground(Integer... params) {
             try {
                 JSONObject getParams = new JSONObject();
-                getParams.put("userId", strings[0]);
-                String requestURL = generateGetRequestURL(getParams);
+                getParams.put("userId", params[0]);
+
+                String requestURL = generateGetRequestURL("http://devostrum.no-ip.info:12345/score?", getParams);
                 String response = LoginActivity.performGetCall(requestURL, getParams);
                 JSONObject jsonObj = new JSONObject(response);
                 boolean success = (boolean) jsonObj.get("success");
 
-                if (success) { //if success, set userobject to the user data
-                    System.out.println(jsonObj);
+                if (success) {
+                    JSONObject userScores = jsonObj.getJSONObject("user");
+                    Player.getPlayer().setScores(userScores);
+
+
                     return true;
                 } else {
-                    //TODO set textview to display message
                     String errorMessage = (String) jsonObj.get("message");
-                    System.out.println(errorMessage);
+                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
                     return false;
                 }
             } catch (JSONException ex) {
@@ -74,7 +81,7 @@ public class StatsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
-                // TODO: Update UI
+                updateStats();
             }
         }
     }

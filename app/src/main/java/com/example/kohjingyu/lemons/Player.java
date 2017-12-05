@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by setia on 12/5/2017.
@@ -79,7 +80,24 @@ public class Player {
         friends = jsonArrayFriends;
     }
 
-    private void setScores(JSONObject jsonObjectScores){
+    private String generateGetScoreRequestURL(JSONObject getParams){
+        String requestURL = "http://devostrum.no-ip.info:12345/score?";
+        Iterator<String> jsonIterator = getParams.keys();
+        try {
+            while (jsonIterator.hasNext()) {
+                String key = jsonIterator.next();
+                requestURL += key + "=" + getParams.get(key);
+                if (jsonIterator.hasNext()) {
+                    requestURL += "&";
+                }
+            }
+        } catch (JSONException ex){
+            ex.printStackTrace();
+        }
+        return requestURL;
+    }
+
+    public void setScores(JSONObject jsonObjectScores){
         this.scores = new Scores(jsonObjectScores);
     }
 
@@ -100,7 +118,7 @@ public class Player {
         setScores(scores);
     }
 
-    private class PlayerActivity {
+    class PlayerActivity {
         private int activityId;
         private String activityType;
         private int score;
@@ -130,7 +148,7 @@ public class Player {
         }
     }
 
-    private class Scores {
+    class Scores {
         private int fitness;
         private int academics;
         private int mentalWellness;

@@ -318,8 +318,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
                 JSONObject postParams = new JSONObject();
                 postParams.put("username", mUsername);
@@ -339,7 +337,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Player newPlayer = new Player(id, name, mUsername, email);
                     Player.setPlayer(newPlayer);
 
-//                    AccountActivity.userInfo = userObj;
                     return true;
                 }
                 else {

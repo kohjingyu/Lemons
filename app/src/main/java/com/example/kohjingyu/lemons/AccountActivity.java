@@ -98,8 +98,11 @@ public class AccountActivity extends AppCompatActivity
     }
 
     public void logout(View view) {
-        // TODO: Implement logout
         Log.i("Lemons", "Logging out...");
+
+        // Set Player singleton to null (logout)
+        Player.setPlayer(null);
+
         Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
         AccountActivity.this.startActivity(intent);
     }
@@ -107,7 +110,6 @@ public class AccountActivity extends AppCompatActivity
     public void loadStats(View view) {
         Log.i("Lemons", "Loading stats");
         Intent intent = new Intent(AccountActivity.this, StatsActivity.class);
-        intent.putExtra("userId", Player.getPlayer().getId());
         AccountActivity.this.startActivity(intent);
     }
 
