@@ -8,20 +8,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 /*
 Activity for searching
  */
 
 public class SearchableActivity extends ListActivity {
-    JSONObject userObj;
+    JSONArray userObj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_searchable);
+        setContentView(R.layout.friend_searchable);
 
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())){
@@ -57,25 +59,29 @@ public class SearchableActivity extends ListActivity {
 //    }
 
 
-    private String[] generateJsonArray(JSONObject jsonObject){
+    private ArrayList<String> generateJsonArray(JSONArray jsonArray){
 
-        String[] jsonArray = new String[3] ;
-        try {
+        ArrayList<String> stringArrayList = new ArrayList<>();
 
-            jsonArray[0] = (jsonObject.get("name").toString() + "\n" + jsonObject.get("username").toString() + "\n" + jsonObject.getString("email").toString());
-            jsonArray[1] = (jsonObject.get("name").toString() + "\n" + jsonObject.get("username").toString() + "\n" + jsonObject.getString("email").toString());
-            jsonArray[2] = (jsonObject.get("name").toString() + "\n" + jsonObject.get("username").toString() + "\n" + jsonObject.getString("email").toString());
-            return jsonArray;
-        } catch (JSONException ex){
-            ex.printStackTrace();
+        ArrayList<JSONObject> jsonObjectArrayList = new ArrayList<>();
+        int counter = 0;
+        while (counter < jsonArray.length()){
+            try {
+                JSONObject temp = jsonArray.getJSONObject(counter);
+                String information = temp.getString("name") + "\n" + temp.getString("username") + "\n" + temp.getString("email");
+                stringArrayList.add(information);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            counter++;
         }
 
-        return null;
+        return stringArrayList;
 
     }
 
     private String generateGetRequestURL(JSONObject getParams){
-        String requestURL = "http://devostrum.no-ip.info:12345/user?";
+        String requestURL = "http://devostrum.no-ip.info:12345/user/search?";
         Iterator<String> jsonIterator = getParams.keys();
         try {
             while (jsonIterator.hasNext()) {
@@ -98,16 +104,17 @@ public class SearchableActivity extends ListActivity {
         protected Boolean doInBackground(String... strings) {
             try {
                 JSONObject getParams = new JSONObject();
-                getParams.put("userId",strings[0]);
+                getParams.put("searchTerm",strings[0]);
                 String requestURL = generateGetRequestURL(getParams);
                 String response = LoginActivity.performGetCall(requestURL, getParams);
+                Log.i("url", requestURL);
                 Log.i("login", response);
                 JSONObject jsonObj = new JSONObject(response);
                 boolean success = (boolean)jsonObj.get("success");
 
                 if(success) { //if success, set userobject to the user data
-                    userObj = (JSONObject) jsonObj.get("user");
-                    System.out.println("ID: " + userObj.get("id"));
+                    userObj = (JSONArray) jsonObj.get("users");
+//                    System.out.println("ID: " + userObj.get("id"));
                     return true;
                 }
                 else {
@@ -127,9 +134,9 @@ public class SearchableActivity extends ListActivity {
         @Override
         protected void onPostExecute(Boolean success){
             if (success){
-                String[] jsonArray = generateJsonArray(userObj);
+                ArrayList<String> stringArrayList = generateJsonArray(userObj);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(),
-                        android.R.layout.simple_list_item_1, jsonArray);
+                        android.R.layout.simple_list_item_1, stringArrayList);
                 setListAdapter(adapter);
 
             }
