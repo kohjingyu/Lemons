@@ -19,7 +19,7 @@ import java.util.Iterator;
  */
 
 public class Player {
-    private final String BASE_URL = "http://devostrum.no-ip.info:12345";
+    private static final String BASE_URL = "http://devostrum.no-ip.info:12345";
 
     private int id;
     private String name;
@@ -272,7 +272,11 @@ public class Player {
     }
 
     public void updateScores() {
-        String urlString = BASE_URL + "/score?userId=" + this.id;
+        updateScores(this.id);
+    }
+
+    public void updateScores(int userId) {
+        String urlString = BASE_URL + "/score?userId=" + userId;
         String response = "";
         //Open connection to get the json response from server
         try {
@@ -314,6 +318,56 @@ public class Player {
         }
         return;
 
+    }
+
+    public static Player getPlayerForId(int userId) {
+        String urlString = BASE_URL + "/user?userId=" + userId;
+        String response = "";
+        //Open connection to get the json response from server
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                String line;
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = br.readLine()) != null) {
+                    response += line;
+                }
+            } else {
+                response = null;
+                Log.i("HTTP", "Connection not successful");
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JSONObject JSONresponse = new JSONObject(response);
+            boolean success = JSONresponse.getBoolean("success");
+            if (success) {
+                JSONObject user = JSONresponse.getJSONObject("user");
+                String newName = user.getString("name");
+                String newEmail = user.getString("email");
+                int newId = Integer.valueOf(user.getString("id"));
+                String newUsername = user.getString("username");
+
+                return new Player(newId, newName, newUsername, newEmail);
+            } else {
+                String message = JSONresponse.getString("message");
+                Log.i("Update", message);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }
