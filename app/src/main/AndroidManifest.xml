@@ -41,22 +41,8 @@
             android:name=".LeaderboardActivity"
             android:parentActivityName=".AccountActivity" />
         <activity
-            android:name=".FriendsActivity"
-            android:parentActivityName=".AccountActivity" />
-        <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".LoginActivity" />
-        <activity
-            android:name=".SearchableActivity"
-            android:parentActivityName=".FriendsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
         <activity android:name=".FriendsActivityNew"></activity>
     </application>
 

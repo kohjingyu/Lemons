@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,8 +20,9 @@ import java.util.Iterator;
  */
 
 public class Player {
-    private final String BASE_URL = "http://devostrum.no-ip.info:12345";
-
+    public final String BASE_URL = "http://devostrum.no-ip.info:12345";
+    public final String MAPLE_URL_HEAD = "https://labs.maplestory.io/api/gms/latest/character/center/2000/20001,30037";
+    public final String MAPLE_URL_TAIL = "/stand1?showears=false&resize=1";
     private int id;
     private String name;
     private String username;
@@ -79,6 +81,33 @@ public class Player {
     private void setFriends(JSONArray jsonArrayFriends){
         friends = jsonArrayFriends;
     }
+
+    public URL mapleURLGenerator(JSONObject jsonObject){
+        String requestURL = "";
+        URL url = null;
+        requestURL = MAPLE_URL_HEAD;
+        Iterator<String> jsonIterator = jsonObject.keys();
+            try {
+                while (jsonIterator.hasNext()) {
+                    String key = jsonIterator.next();
+                    String itemId = jsonObject.getString(key);
+                    if (!itemId.equals("0")){
+                        requestURL += "," + itemId;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        try {
+            url = new URL(requestURL);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+
+    }
+
+
 
     private String generateGetScoreRequestURL(JSONObject getParams){
         String requestURL = "http://devostrum.no-ip.info:12345/score?";
