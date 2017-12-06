@@ -20,7 +20,7 @@ import java.util.Iterator;
  */
 
 public class Player {
-    public final String BASE_URL = "http://devostrum.no-ip.info:12345";
+    public static final String BASE_URL = "http://devostrum.no-ip.info:12345";
     public final String MAPLE_URL_HEAD = "https://labs.maplestory.io/api/gms/latest/character/center/2000/20001,30037";
     public final String MAPLE_URL_TAIL = "/stand1?showears=false&resize=1";
     private int id;
