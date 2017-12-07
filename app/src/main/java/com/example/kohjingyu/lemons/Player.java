@@ -31,6 +31,7 @@ public class Player {
     private ArrayList<PlayerActivity> playerActivities;
     private Scores scores;
     private static Player player;
+    private JSONObject equipped = new JSONObject();
 
     public static Player getPlayer() {
         return player;
@@ -61,6 +62,7 @@ public class Player {
     public Scores getScores() {
         return scores;
     };
+    public JSONObject getEquipped(){ return equipped;}
 
     private void setPlayerActivitiesJSON(JSONArray jsonArrayPlayerActivities){
         playerActivities = new ArrayList<>();
@@ -95,6 +97,7 @@ public class Player {
                         requestURL += "," + itemId;
                     }
                 }
+                requestURL += MAPLE_URL_TAIL;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -130,11 +133,24 @@ public class Player {
         this.scores = new Scores(jsonObjectScores);
     }
 
+    public void addEquipment(String type, int equipmentId){
+        try {
+            equipped.put(type,equipmentId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Player(int id, String name, String username, String email){
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
+        try {
+            this.equipped.put("hat",1001112);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public Player(int id, String name, String email,
