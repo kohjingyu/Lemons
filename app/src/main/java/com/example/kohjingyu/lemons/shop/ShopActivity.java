@@ -15,19 +15,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class ShopActivity extends AppCompatActivity
         implements EquipmentFragment.OnEquipmentSelectedListener, ShopCloneFragment.OnFragmentInteractionListener {
     TextView shopTextView;
-    ArrayList<String> equipped;
+    HashMap<String, Integer> equipped;
     ImageView avatarImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
+
+
 
         EquipmentFragment equipmentFragment = new EquipmentFragment();
 
@@ -38,16 +40,14 @@ public class ShopActivity extends AppCompatActivity
         fragmentTransaction.add(R.id.shop_container_1, equipmentFragment, "Equipment fragment");
 
         fragmentTransaction.commit();
-        equipped = new ArrayList<String>();
-
+        equipped = new HashMap<>();
     }
 
+    //This function is called when an item is clicked
     @Override
-    public void addEquipmentToAvatar(String equipmentId) {
+    public void addEquipmentToAvatar(String type, int equipmentId) {
         //TODO link this function to url builder to change the image
-        shopTextView = findViewById(R.id.shop_title);
-        shopTextView.setText(equipmentId);
-        equipped.add(equipmentId);
+        equipped.put(type, equipmentId);
         String requestURLString = urlEquipmentBuilder();
         try {
             URL imageURL = new URL(requestURLString);
@@ -59,12 +59,15 @@ public class ShopActivity extends AppCompatActivity
     }
 
     public String urlEquipmentBuilder(){
+        //build url for maple story api
         String requestURL = "";
         String frontURL = "https://labs.maplestory.io/api/gms/latest/character/center/2000/";
         String backURL = "/stand1?showears=false&resize=1";
-        Iterator<String> stringIterator = equipped.iterator();
+        Iterator<String> stringIterator = equipped.keySet().iterator();
+        String keySet = "";
         while (stringIterator.hasNext()){
-            frontURL += stringIterator.next();
+            keySet = stringIterator.next();
+            frontURL += equipped.get(keySet);
             if (stringIterator.hasNext()){
                 frontURL += ",";
             }

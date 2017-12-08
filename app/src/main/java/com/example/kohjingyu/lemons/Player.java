@@ -228,6 +228,10 @@ public class Player {
         }
     }
 
+    public void updateEquipment(JSONObject equipped){
+        this.equipped = equipped;
+    }
+
     public void updateFriends(){
         String urlString = BASE_URL + "/friend?userId=" + this.id;
         String response = "";

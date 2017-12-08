@@ -91,7 +91,7 @@ public class EquipmentFragment extends Fragment {
 
 
     public interface OnEquipmentSelectedListener {
-        void addEquipmentToAvatar(String equipmentId);
+        void addEquipmentToAvatar(String type, int equipmentId);
     }
 
     @Override
