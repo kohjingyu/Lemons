@@ -236,8 +236,4 @@ public class FriendsActivityNew extends AppCompatActivity {
             getAvatarTask.execute(friendList);
         }
     }
-
-
-
-
 }
