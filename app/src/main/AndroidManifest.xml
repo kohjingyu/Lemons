@@ -43,7 +43,8 @@
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".LoginActivity" />
-        <activity android:name=".FriendsActivityNew"></activity>
+        <activity android:name=".FriendsActivityNew"
+            android:windowSoftInputMode="stateVisible|adjustPan"/>
     </application>
 
 </manifest>

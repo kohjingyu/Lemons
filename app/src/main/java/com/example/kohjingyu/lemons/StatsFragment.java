@@ -11,13 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
+import org.json.JSONArray;
+
 
 public class StatsFragment extends Fragment {
 
@@ -34,8 +39,12 @@ public class StatsFragment extends Fragment {
 
     TextView usernameText;
 
+    Button addFriendButton;
+
     int userId;
     Player player;
+
+    public static final String key = "StatsFragmentMessage";
 
     public static StatsFragment newInstance(int userId) {
         StatsFragment statsFragment = new StatsFragment();
@@ -51,23 +60,34 @@ public class StatsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.stats_fragment, container, false);
 
-        academicProgress = (ProgressBar) view.findViewById(R.id.academicProgress);
-        academicProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#ed3b27")));
+        academicProgress = view.findViewById(R.id.academicProgress);
+        academicProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#06BA63")));
         academicProgressText = view.findViewById(R.id.academicProgressText);
 
-        fitnessProgress = (ProgressBar) view.findViewById(R.id.fitnessProgress);
-        fitnessProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#ed3b27")));
+        fitnessProgress = view.findViewById(R.id.fitnessProgress);
+        fitnessProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#ED8B14")));
         fitnessProgressText = view.findViewById(R.id.fitnessProgressText);
 
-        dietProgress = (ProgressBar) view.findViewById(R.id.dietProgress);
-        dietProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#ed3b27")));
+        dietProgress = view.findViewById(R.id.dietProgress);
+        dietProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#CF2522")));
         dietProgressText = view.findViewById(R.id.dietProgressText);
 
-        mentalProgress = (ProgressBar) view.findViewById(R.id.mentalProgress);
-        mentalProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#ed3b27")));
+        mentalProgress = view.findViewById(R.id.mentalProgress);
+        mentalProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#1196E9")));
         mentalProgressText = view.findViewById(R.id.mentalProgressText);
 
         usernameText = view.findViewById(R.id.usernameText);
+
+        addFriendButton = view.findViewById(R.id.addfriendbutton);
+        addFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //TODO implement add friend proper
+                Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
+
+//                addFriend addfriend = new addFriend();
+//                addfriend.execute();
+            }
+        });
 
         avatarImage = (ImageView)view.findViewById(R.id.avatarImage);
         GetAvatarTask getAvatarTask = new GetAvatarTask();
@@ -77,16 +97,38 @@ public class StatsFragment extends Fragment {
         userId = bundle.getInt("userId");
         System.out.println(userId);
 
+
         if(userId == Player.getPlayer().getId()) {
             player = Player.getPlayer();
             // Update the player scores
             UpdateScores updateScoresTask = new UpdateScores();
             updateScoresTask.execute(0);
+            addFriendButton.setVisibility(View.INVISIBLE);
+            addFriendButton.setEnabled(false);
+
         }
         else {
             System.out.println("getting info");
             GetPlayerInfo getInfo = new GetPlayerInfo();
             getInfo.execute(userId);
+
+            JSONArray friendList = Player.getPlayer().getFriends();
+
+            boolean alreadyFriend = false;
+            if(friendList!=null){
+                alreadyFriend = userExists(friendList, userId);
+            }
+
+            if(alreadyFriend){
+                addFriendButton.setVisibility(View.VISIBLE);
+                addFriendButton.setEnabled(false);
+                addFriendButton.setText("Already friend");
+            }else{
+                addFriendButton.setVisibility(View.VISIBLE);
+                addFriendButton.setEnabled(true);
+            }
+
+
         }
         return view;
     }
@@ -137,6 +179,45 @@ public class StatsFragment extends Fragment {
         }
     }
 
+
+//    private class addFriend extends  AsyncTask<Integer, Void, Boolean>{
+//
+//        @Override
+//        protected Boolean doInBackground(Integer... integers) {
+//            int requesterID = userId;
+//            int requesteeID = Player.getPlayer().getId();
+//
+//            try {
+//                JSONObject postParams = new JSONObject();
+//                postParams.put("requester", requesterID);
+//                postParams.put("requestee", requesteeID);
+//                String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
+//                Log.i("Angelia", String.valueOf(response.isEmpty()));
+//                JSONObject jsonObj = new JSONObject(response);
+//                boolean success = (boolean)jsonObj.get("success");
+//                if(success) {
+//                    Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
+//                    Player.getPlayer().updateFriends(); //refreshes list of friends
+//                }
+//                else {
+//                    String errorMessage = (String) jsonObj.get("message");
+//                    System.out.println(errorMessage);
+//                }
+//            }
+//            catch (JSONException ex) {
+//                ex.printStackTrace();
+//            }
+//
+//
+//            return true;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Boolean success){
+//            Log.i("Angelia","here");
+//        }
+//    }
+
     private class GetPlayerInfo extends AsyncTask<Integer, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Integer... params) {
@@ -153,6 +234,12 @@ public class StatsFragment extends Fragment {
             }
         }
     }
+
+
+    private boolean userExists(JSONArray jsonArray, int idToFind){
+        return jsonArray.toString().contains("\"id\":\""+idToFind+"\"");
+    }
+
 
     public class GetAvatarTask extends AsyncTask<String, Void, Bitmap> {
 
@@ -179,7 +266,7 @@ public class StatsFragment extends Fragment {
             // TODO: Find a better solution than scaling it
             int avatarHeight = 500;
             Bitmap newBitmap = Bitmap.createScaledBitmap(avatar, (int)(avatarHeight * avatar.getWidth()/avatar.getHeight()), avatarHeight, false);
-            avatarImage.setImageBitmap(newBitmap);
+            avatarImage.setImageBitmap(avatar);
         }
     }
 }

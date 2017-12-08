@@ -12,8 +12,14 @@
         android:layout_height="match_parent"
         android:src="@drawable/extendedactivitybackground"
         android:scaleType="center"
-        android:baselineAlignBottom="true"
         />
+
+    <Button
+        android:id="@+id/addfriendbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add as Friend"
+        android:layout_gravity="right"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,10 +28,11 @@
 
         <ImageView
             android:id="@+id/avatarImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_gravity="center"
             android:scaleType="centerInside"
+
             android:src="@drawable/avatar" />
 
         <TextView
@@ -61,7 +68,8 @@
                 android:id="@+id/academicProgress"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:indeterminateTintMode="multiply"/>
 
             <TextView
                 android:id="@+id/academicProgressText"

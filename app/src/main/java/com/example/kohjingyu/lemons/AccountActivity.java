@@ -118,9 +118,9 @@ public class AccountActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Bitmap avatar){
             // TODO: Find a better solution than scaling it
-            int avatarHeight = 500;
-            Bitmap newBitmap = Bitmap.createScaledBitmap(avatar, (int)(avatarHeight * avatar.getWidth()/avatar.getHeight()), avatarHeight, false);
-            avatarImage.setImageBitmap(newBitmap);
+//            int avatarHeight = 500;
+//            Bitmap newBitmap = Bitmap.createScaledBitmap(avatar, (int)(avatarHeight * avatar.getWidth()/avatar.getHeight()), avatarHeight, false);
+            avatarImage.setImageBitmap(avatar);
         }
     }
 
