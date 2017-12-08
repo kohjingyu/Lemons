@@ -14,10 +14,9 @@
             android:id="@+id/viewfriendsbackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/viewfriendsbackground"
-            android:scaleType="center"
             android:layout_alignParentTop="true"
-            />
+            android:scaleType="center"
+            android:src="@drawable/viewfriendsbackground" />
 
     </RelativeLayout>
 
@@ -38,7 +37,6 @@
 
     <ImageButton
         android:id="@+id/friends_button"
-        android:onClick="SearchFriends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -46,6 +44,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
+        android:onClick="SearchFriends"
+        android:scaleType="fitXY"
         android:src="@drawable/searchbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,8 +1,10 @@
 package com.example.kohjingyu.lemons;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.acl.LastOwnerException;
+
 /**
  * Created by setia on 12/5/2017.
  */
@@ -22,6 +26,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     private JSONArray friendsJSONArray;
     Bitmap[] bitmaps;
     Context parentContext;
+    public static final String putExtraKey = "FriendsAdapterMessage";
+;
 
     FriendsAdapter(Context context, JSONArray friendsJSONArray, Bitmap[] bitmaps){
         this.parentContext = context;
@@ -55,13 +61,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
         return friendsJSONArray.length();
     }
 
-    class FriendsViewHolder extends RecyclerView.ViewHolder {
+    class FriendsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView avatarImageView;
         TextView userInformationTextView;
         View v;
         FriendsViewHolder(View v){
             super(v);
             this.v = v;
+            v.setOnClickListener(this);
         }
 
         public void bind(int position){
@@ -80,6 +87,30 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 avatarImageView.setImageBitmap(avatar);
             }
         }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            try {
+                JSONObject stranger = friendsJSONArray.getJSONObject(position);
+                Log.i("Angelia", stranger.toString());
+                int strangerID =  stranger.getInt("id");
+
+                Intent intent = new Intent(v.getContext(), StatsActivity.class);
+                intent.putExtra(putExtraKey, strangerID);
+
+                v.getContext().startActivity(intent);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+        }
+
+
     }
 
 }
