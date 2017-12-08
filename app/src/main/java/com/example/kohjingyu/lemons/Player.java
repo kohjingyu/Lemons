@@ -171,7 +171,7 @@ public class Player {
 
         public PlayerActivity(JSONObject jsonObject){
             try {
-                this.activityId = jsonObject.getInt("activityId");
+                this.activityId = jsonObject.getInt("id");
                 this.activityType = jsonObject.getString("activityType");
                 this.score = jsonObject.getInt("score");
                 this.remarks = jsonObject.getString("remarks");
@@ -190,6 +190,11 @@ public class Player {
         }
         public String getRemarks() {
             return remarks;
+        }
+
+        @Override
+        public String toString() {
+            return this.activityId + ": " + this.activityType + " Score: " + this.score + " Remarks: " + this.remarks;
         }
     }
 

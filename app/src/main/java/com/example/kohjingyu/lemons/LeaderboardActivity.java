@@ -33,23 +33,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         JSONArray jsonArray = new JSONArray();
-//        JSONObject jsonObject1 = new JSONObject();
-//        JSONObject jsonObject2 = new JSONObject();
-//        try {
-//            jsonObject1.put("name", "Vincent");
-//            jsonObject1.put("username", "vincentcent");
-//            jsonObject2.put("name", "Vincent Setiawan");
-//            jsonObject2.put("username", "vincentcentcent");
-//            jsonArray.put(jsonObject1);
-//            jsonArray.put(jsonObject2);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-        bitmaps = new Bitmap[2];
-        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
-        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
-        bitmaps[0] = bitmap1;
-        bitmaps[1] = bitmap2;
 
         LeaderboardActivity.GetLeaderboardTask getFriendsTask = new LeaderboardActivity.GetLeaderboardTask();
         getFriendsTask.execute();

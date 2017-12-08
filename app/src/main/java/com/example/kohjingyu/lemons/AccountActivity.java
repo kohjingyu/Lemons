@@ -224,4 +224,10 @@ public class AccountActivity extends AppCompatActivity
         Intent intent = new Intent(AccountActivity.this, FriendsActivityNew.class);
         AccountActivity.this.startActivity(intent);
     }
+
+    public void loadLog(View view) {
+        Log.i("Lemons", "Loading log");
+        Intent intent = new Intent(AccountActivity.this, LogActivity.class);
+        AccountActivity.this.startActivity(intent);
+    }
 }
