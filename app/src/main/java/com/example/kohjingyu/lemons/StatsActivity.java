@@ -26,8 +26,8 @@ public class StatsActivity extends AppCompatActivity {
         int id = intent.getIntExtra(FriendsAdapter.putExtraKey, Player.getPlayer().getId());
 
         // Load stats for current player
-//        StatsFragment statsFragment = StatsFragment.newInstance(id);
-        StatsFragment statsFragment = StatsFragment.newInstance(getIntent().getIntExtra("id", Player.getPlayer().getId()));
+        StatsFragment statsFragment = StatsFragment.newInstance(id);
+//        StatsFragment statsFragment = StatsFragment.newInstance(getIntent().getIntExtra("id", Player.getPlayer().getId()));
 
         getFragmentManager()
                 .beginTransaction()

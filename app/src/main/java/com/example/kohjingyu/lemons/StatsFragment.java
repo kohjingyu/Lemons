@@ -62,18 +62,22 @@ public class StatsFragment extends Fragment {
 
         academicProgress = view.findViewById(R.id.academicProgress);
         academicProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#06BA63")));
+        academicProgress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EBEBEB")));
         academicProgressText = view.findViewById(R.id.academicProgressText);
 
         fitnessProgress = view.findViewById(R.id.fitnessProgress);
         fitnessProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#ED8B14")));
+        fitnessProgress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EBEBEB")));
         fitnessProgressText = view.findViewById(R.id.fitnessProgressText);
 
         dietProgress = view.findViewById(R.id.dietProgress);
         dietProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#CF2522")));
+        dietProgress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EBEBEB")));
         dietProgressText = view.findViewById(R.id.dietProgressText);
 
         mentalProgress = view.findViewById(R.id.mentalProgress);
         mentalProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#1196E9")));
+        mentalProgress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EBEBEB")));
         mentalProgressText = view.findViewById(R.id.mentalProgressText);
 
         usernameText = view.findViewById(R.id.usernameText);
