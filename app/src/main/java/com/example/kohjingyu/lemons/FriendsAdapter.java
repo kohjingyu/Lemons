@@ -112,5 +112,4 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
 
 
     }
-
 }

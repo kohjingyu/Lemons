@@ -2,6 +2,8 @@ package com.example.kohjingyu.lemons;
 
 import android.app.Fragment;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,15 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
-import static com.example.kohjingyu.lemons.LoginActivity.performPostCall;
+import org.json.JSONArray;
+
 
 public class StatsFragment extends Fragment {
 
@@ -30,6 +34,8 @@ public class StatsFragment extends Fragment {
     TextView dietProgressText;
     ProgressBar mentalProgress;
     TextView mentalProgressText;
+
+    ImageView avatarImage;
 
     TextView usernameText;
 
@@ -82,6 +88,10 @@ public class StatsFragment extends Fragment {
 //                addfriend.execute();
             }
         });
+
+        avatarImage = (ImageView)view.findViewById(R.id.avatarImage);
+        GetAvatarTask getAvatarTask = new GetAvatarTask();
+        getAvatarTask.execute(String.valueOf(Player.getPlayer().getId()));
 
         Bundle bundle = this.getArguments();
         userId = bundle.getInt("userId");
@@ -225,9 +235,38 @@ public class StatsFragment extends Fragment {
         }
     }
 
+
     private boolean userExists(JSONArray jsonArray, int idToFind){
         return jsonArray.toString().contains("\"id\":\""+idToFind+"\"");
     }
 
 
+    public class GetAvatarTask extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... params){
+            URL avatarURL = AccountActivity.generateAvatarURL(params[0]);
+            Bitmap avatar = null;
+
+            int i = 0;
+            try {
+                if(avatarURL != null) {
+                    Log.i("URL",avatarURL.toString());
+                    InputStream in = avatarURL.openStream();
+                    avatar = BitmapFactory.decodeStream(in);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return avatar;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap avatar){
+            // TODO: Find a better solution than scaling it
+            int avatarHeight = 500;
+            Bitmap newBitmap = Bitmap.createScaledBitmap(avatar, (int)(avatarHeight * avatar.getWidth()/avatar.getHeight()), avatarHeight, false);
+            avatarImage.setImageBitmap(avatar);
+        }
+    }
 }

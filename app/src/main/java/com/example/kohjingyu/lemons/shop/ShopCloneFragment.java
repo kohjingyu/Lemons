@@ -1,14 +1,29 @@
 package com.example.kohjingyu.lemons.shop;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 
+import com.example.kohjingyu.lemons.Player;
 import com.example.kohjingyu.lemons.R;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +36,8 @@ import com.example.kohjingyu.lemons.R;
 public class ShopCloneFragment extends Fragment {
     private static final String ARG_ITEM_TYPE = "itemType";
     private String mItemType;
-
+    private int[] itemId = {1000003, 1001112, 1002257, 1003686, 1004169, 1004754};
+    private JSONObject jsonObject; //TODO: use jsonobject instead of array
     private OnFragmentInteractionListener mListener;
 
     public ShopCloneFragment() {
@@ -42,6 +58,8 @@ public class ShopCloneFragment extends Fragment {
         args.putString(ARG_ITEM_TYPE, itemType);
         fragment.setArguments(args);
         return fragment;
+
+
     }
 
     @Override
@@ -55,7 +73,23 @@ public class ShopCloneFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view  = inflater.inflate(R.layout.shop_item_display, container, false);
+        View view  = inflater.inflate(R.layout.shop_item_display_new, container, false);
+        GridView gridView = (GridView) view.findViewById(R.id.gridview);
+        gridView.setAdapter(new ImageAdapter(getContext()));
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                Player player = Player.getPlayer();
+                player.addEquipment(mItemType, itemId[position]);
+                URL avatarURL = player.mapleURLGenerator(player.getEquipped());
+                Log.i("url", avatarURL.toString());
+                new GetAvatarTask().execute(avatarURL);
+
+
+            }
+        });
+
         return view;
     }
 
@@ -96,5 +130,62 @@ public class ShopCloneFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public class ImageAdapter extends BaseAdapter {
+        private Context mContext;
+
+        public ImageAdapter(Context c) {
+            mContext = c;
+        }
+
+        public int getCount() {
+            return mThumbIds.length;
+        }
+
+        public Object getItem(int position) {
+            return null;
+        }
+
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        // create a new ImageView for each item referenced by the Adapter
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View view = inflater.inflate(R.layout.shop_item_display_viewholder,parent,false);
+            ImageView imageView = view.findViewById(R.id.shop_item);
+            imageView.setImageResource(mThumbIds[position]);
+            return view;
+        }
+
+        // references to our images
+        private Integer[] mThumbIds = {
+                R.drawable.shopitem1,R.drawable.shopitem2,R.drawable.shopitem3,R.drawable.shopitem4,R.drawable.shopitem5,R.drawable.shopitem6
+        };
+    }
+
+    public class GetAvatarTask extends AsyncTask<URL, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(URL...urls){
+            URL url = urls[0];
+            Bitmap avatar = null; //Create new array of bitmap with length depending on the url
+            InputStream in = null;
+            try {
+                in = url.openStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            avatar = BitmapFactory.decodeStream(in);
+            return avatar;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap avatar){
+            ImageView imageView = getParentFragment().getActivity().findViewById(R.id.avatar);
+            imageView.setImageBitmap(avatar);
+        }
     }
 }
