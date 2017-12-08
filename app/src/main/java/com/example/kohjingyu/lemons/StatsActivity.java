@@ -11,7 +11,7 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
 
         // Load stats for current player
-        StatsFragment statsFragment = StatsFragment.newInstance(Player.getPlayer().getId());
+        StatsFragment statsFragment = StatsFragment.newInstance(getIntent().getIntExtra("id", Player.getPlayer().getId()));
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.statsFragmentContainer, statsFragment, "statsFragment")
