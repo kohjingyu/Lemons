@@ -122,21 +122,27 @@ public class StatsFragment extends Fragment {
             GetPlayerInfo getInfo = new GetPlayerInfo();
             getInfo.execute(userId);
 
-            JSONArray friendList = Player.getPlayer().getFriends();
+            try{
+                JSONArray friendList = Player.getPlayer().getFriends();
+                Log.i("add friend", "friend list: "+ friendList.toString());
 
-            boolean alreadyFriend = false;
-            if(friendList!=null){
-                alreadyFriend = userExists(friendList, userId);
+                boolean alreadyFriend = false;
+                if(friendList!=null){
+                    alreadyFriend = userExists(friendList, userId);
+                }
+
+                if(alreadyFriend){
+                    addFriendButton.setVisibility(View.VISIBLE);
+                    addFriendButton.setEnabled(false);
+                    addFriendButton.setText("Already friend");
+                }else{
+                    addFriendButton.setVisibility(View.VISIBLE);
+                    addFriendButton.setEnabled(true);
+                }
+            }catch (Exception ex){
+                ex.printStackTrace();
             }
 
-            if(alreadyFriend){
-                addFriendButton.setVisibility(View.VISIBLE);
-                addFriendButton.setEnabled(false);
-                addFriendButton.setText("Already friend");
-            }else{
-                addFriendButton.setVisibility(View.VISIBLE);
-                addFriendButton.setEnabled(true);
-            }
         }
         return view;
     }
@@ -210,22 +216,29 @@ public class StatsFragment extends Fragment {
             int requesteeID = Player.getPlayer().getId();
 
             try {
+                Log.i("add friend", "requester: " + requesterID);
+                Log.i("add friend", "requestee: " + requesteeID);
                 JSONObject postParams = new JSONObject();
                 postParams.put("requester", requesterID);
                 postParams.put("requestee", requesteeID);
-                String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
+                try{ //TODO fix thissss, check backend
+                    String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
+                    JSONObject jsonObj = new JSONObject(response);
+                    boolean success = (boolean)jsonObj.get("success");
 
-                JSONObject jsonObj = new JSONObject(response);
-                boolean success = (boolean)jsonObj.get("success");
+                    if(success) {
+                        Log.i("add friend", "player accepted stranger's friend request (requester = stranger, requestee = player)");
+                        return true;
+                    }
+                    else {
+                        String errorMessage = (String)jsonObj.get("message");
+                        System.out.println(errorMessage);
+                    }
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
 
-                if(success) {
-                    Log.i("add friend", "player accepted stranger's friend request (requester = stranger, requestee = player)");
-                    return true;
-                }
-                else {
-                    String errorMessage = (String)jsonObj.get("message");
-                    System.out.println(errorMessage);
-                }
+
 
                 requesterID = Player.getPlayer().getId();
                 requesteeID = userId;
@@ -233,19 +246,22 @@ public class StatsFragment extends Fragment {
                 postParams = new JSONObject();
                 postParams.put("requester", requesterID);
                 postParams.put("requestee", requesteeID);
-                response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
 
-                jsonObj = new JSONObject(response);
-                success = (boolean)jsonObj.get("success");
+                try{
+                    String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
+                    JSONObject jsonObj = new JSONObject(response);
+                    boolean success = (boolean)jsonObj.get("success");
 
-                if(success) {
-                    Log.i("add friend", "stranger accepted player's friend request (requester = player, requestee = player)");
-                    Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                else {
-                    String errorMessage = (String)jsonObj.get("message");
-                    System.out.println(errorMessage);
+                    if(success) {
+                        Log.i("add friend", "stranger accepted player's friend request (requester = player, requestee = player)");
+                        return true;
+                    }
+                    else {
+                        String errorMessage = (String)jsonObj.get("message");
+                        System.out.println(errorMessage);
+                    }
+                }catch (Exception ex){
+                    ex.printStackTrace();
                 }
             }
             catch (JSONException ex) {
@@ -253,12 +269,13 @@ public class StatsFragment extends Fragment {
             }
 
 
-            return true;
+            return false;
         }
 
         @Override
         protected void onPostExecute(Boolean success){
             Log.i("Angelia","here");
+            Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -280,7 +297,9 @@ public class StatsFragment extends Fragment {
     }
 
     private boolean userExists(JSONArray jsonArray, int idToFind){
-        return jsonArray.toString().contains("\"id\":\""+idToFind+"\"");
+        if(jsonArray!= null){
+            return jsonArray.toString().contains("\"id\":\""+idToFind+"\"");
+        } else return false;
     }
 
 

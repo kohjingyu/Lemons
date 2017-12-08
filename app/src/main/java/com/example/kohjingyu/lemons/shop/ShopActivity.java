@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kohjingyu.lemons.Player;
 import com.example.kohjingyu.lemons.R;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.Iterator;
 
 public class ShopActivity extends AppCompatActivity
         implements EquipmentFragment.OnEquipmentSelectedListener, ShopCloneFragment.OnFragmentInteractionListener {
-    TextView shopTextView;
+    TextView avatarName;
     HashMap<String, Integer> equipped;
     ImageView avatarImageView;
 
@@ -30,6 +31,8 @@ public class ShopActivity extends AppCompatActivity
         setContentView(R.layout.shop_activity);
 
 
+        avatarName = findViewById(R.id.username);
+        avatarName.setText(Player.getPlayer().getUsername());
 
         EquipmentFragment equipmentFragment = new EquipmentFragment();
 

@@ -29,7 +29,7 @@
         <ImageView
             android:id="@+id/avatarImage"
             android:layout_width="150dp"
-            android:layout_height="195dp"
+            android:layout_height="160dp"
             android:layout_gravity="center_horizontal|center_vertical"
             android:scaleType="fitCenter"
 
