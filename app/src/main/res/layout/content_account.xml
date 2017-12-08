@@ -19,11 +19,11 @@
         />
 
     <ImageView
-        android:id="@+id/avatar"
+        android:id="@+id/avatarImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/avatar"
-        android:layout_above="@id/username"
+        android:layout_above="@+id/username"
         android:layout_centerHorizontal="true"
         />
 

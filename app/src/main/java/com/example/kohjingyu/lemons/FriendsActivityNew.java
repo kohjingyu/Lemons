@@ -162,9 +162,11 @@ public class FriendsActivityNew extends AppCompatActivity {
             while (i < avatarURLs.length) {
                 tempurl = avatarURLs[i];
                 try {
-                    Log.i("URL",tempurl.toString());
-                    InputStream in = tempurl.openStream();
-                    avatars[i] = BitmapFactory.decodeStream(in);
+                    if(tempurl != null) {
+                        Log.i("URL",tempurl.toString());
+                        InputStream in = tempurl.openStream();
+                        avatars[i] = BitmapFactory.decodeStream(in);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

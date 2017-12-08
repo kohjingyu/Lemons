@@ -1,6 +1,9 @@
 package com.example.kohjingyu.lemons;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,17 +15,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kohjingyu.lemons.shop.ShopActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class AccountActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextView userNameText;
+    public static final String BASE_URL = "http://devostrum.no-ip.info:12345";
+    ImageView avatarImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +58,11 @@ public class AccountActivity extends AppCompatActivity
 
         userNameText = (TextView)findViewById(R.id.username);
         userNameText.setText(name);
+
+        avatarImage = (ImageView)findViewById(R.id.avatarImage);
+
+        GetAvatarTask getAvatarTask = new GetAvatarTask();
+        getAvatarTask.execute(String.valueOf(Player.getPlayer().getId()));
     }
 
     @Override
@@ -76,6 +95,83 @@ public class AccountActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class GetAvatarTask extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... params){
+            URL avatarURL = generateAvatarURL(params[0]);
+            Bitmap avatar = null;
+
+            int i = 0;
+            try {
+                if(avatarURL != null) {
+                    Log.i("URL",avatarURL.toString());
+                    InputStream in = avatarURL.openStream();
+                    avatar = BitmapFactory.decodeStream(in);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return avatar;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap avatar){
+            // TODO: Find a better solution than scaling it
+            int avatarHeight = 500;
+            Bitmap newBitmap = Bitmap.createScaledBitmap(avatar, (int)(avatarHeight * avatar.getWidth()/avatar.getHeight()), avatarHeight, false);
+            avatarImage.setImageBitmap(newBitmap);
+        }
+    }
+
+    public static URL generateAvatarURL(String userId){
+        String response = "";
+        response = "";
+        URL avatarURL = null;
+
+        Log.i("userId", userId);
+        try {
+            URL url = new URL(BASE_URL + "/avatar?userId=" + userId);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                String line;
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = br.readLine()) != null) {
+                    response += line;
+                }
+            } else {
+                response = null;
+                Log.i("HTTP", "Connection not successful");
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JSONObject JSONresponse = new JSONObject(response);
+            Log.i("response", response);
+            boolean success = JSONresponse.getBoolean("success");
+
+            if (success){
+                JSONObject equipments = JSONresponse.getJSONObject("user");
+                avatarURL = Player.getPlayer().mapleURLGenerator(equipments);
+            } else {
+                String message = JSONresponse.getString("message");
+                Log.i("Account", message);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return avatarURL;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

@@ -33,18 +33,18 @@ public class LeaderboardActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject1 = new JSONObject();
-        JSONObject jsonObject2 = new JSONObject();
-        try {
-            jsonObject1.put("name", "Vincent");
-            jsonObject1.put("username", "vincentcent");
-            jsonObject2.put("name", "Vincent Setiawan");
-            jsonObject2.put("username", "vincentcentcent");
-            jsonArray.put(jsonObject1);
-            jsonArray.put(jsonObject2);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        JSONObject jsonObject1 = new JSONObject();
+//        JSONObject jsonObject2 = new JSONObject();
+//        try {
+//            jsonObject1.put("name", "Vincent");
+//            jsonObject1.put("username", "vincentcent");
+//            jsonObject2.put("name", "Vincent Setiawan");
+//            jsonObject2.put("username", "vincentcentcent");
+//            jsonArray.put(jsonObject1);
+//            jsonArray.put(jsonObject2);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         bitmaps = new Bitmap[2];
         Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
         Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
@@ -81,8 +81,8 @@ public class LeaderboardActivity extends AppCompatActivity {
             for (int i = 0; i < leaderboardList.length(); i++) {
                 response = "";
                 JSONObject temp = leaderboardList.getJSONObject(i); //each friend jsonobject containing userid
-                String userId = String.valueOf(temp.getInt("id"));
-                Log.i("id", userId);
+                String userId = String.valueOf(temp.getInt("userId"));
+                Log.i("userId", userId);
                 try {
                     URL url = new URL(BASE_URL + "/avatar?userId=" + userId);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -144,9 +144,11 @@ public class LeaderboardActivity extends AppCompatActivity {
             while (i < avatarURLs.length) {
                 tempurl = avatarURLs[i];
                 try {
-                    Log.i("URL",tempurl.toString());
-                    InputStream in = tempurl.openStream();
-                    avatars[i] = BitmapFactory.decodeStream(in);
+                    if(tempurl != null) {
+                        Log.i("URL",tempurl.toString());
+                        InputStream in = tempurl.openStream();
+                        avatars[i] = BitmapFactory.decodeStream(in);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -213,8 +215,8 @@ public class LeaderboardActivity extends AppCompatActivity {
             friendsAdapter.update(friendList,tempAvatars);
             friendsAdapter.notifyDataSetChanged();
 
-//            LeaderboardActivity.GetAvatarTask getAvatarTask = new LeaderboardActivity.GetAvatarTask();
-//            getAvatarTask.execute(friendList);
+            LeaderboardActivity.GetAvatarTask getAvatarTask = new LeaderboardActivity.GetAvatarTask();
+            getAvatarTask.execute(friendList);
         }
     }
 

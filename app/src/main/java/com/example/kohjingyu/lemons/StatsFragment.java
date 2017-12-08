@@ -2,15 +2,22 @@ package com.example.kohjingyu.lemons;
 
 import android.app.Fragment;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class StatsFragment extends Fragment {
 
@@ -22,6 +29,8 @@ public class StatsFragment extends Fragment {
     TextView dietProgressText;
     ProgressBar mentalProgress;
     TextView mentalProgressText;
+
+    ImageView avatarImage;
 
     TextView usernameText;
 
@@ -59,6 +68,10 @@ public class StatsFragment extends Fragment {
         mentalProgressText = view.findViewById(R.id.mentalProgressText);
 
         usernameText = view.findViewById(R.id.usernameText);
+
+        avatarImage = (ImageView)view.findViewById(R.id.avatarImage);
+        GetAvatarTask getAvatarTask = new GetAvatarTask();
+        getAvatarTask.execute(String.valueOf(Player.getPlayer().getId()));
 
         Bundle bundle = this.getArguments();
         userId = bundle.getInt("userId");
@@ -138,6 +151,35 @@ public class StatsFragment extends Fragment {
                 UpdateScores updateScoresTask = new UpdateScores();
                 updateScoresTask.execute(0);
             }
+        }
+    }
+
+    public class GetAvatarTask extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... params){
+            URL avatarURL = AccountActivity.generateAvatarURL(params[0]);
+            Bitmap avatar = null;
+
+            int i = 0;
+            try {
+                if(avatarURL != null) {
+                    Log.i("URL",avatarURL.toString());
+                    InputStream in = avatarURL.openStream();
+                    avatar = BitmapFactory.decodeStream(in);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return avatar;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap avatar){
+            // TODO: Find a better solution than scaling it
+            int avatarHeight = 500;
+            Bitmap newBitmap = Bitmap.createScaledBitmap(avatar, (int)(avatarHeight * avatar.getWidth()/avatar.getHeight()), avatarHeight, false);
+            avatarImage.setImageBitmap(newBitmap);
         }
     }
 }
