@@ -62,6 +62,8 @@
         android:layout_marginStart="44dp"
         android:layout_marginTop="8dp"
         android:hint="Search friends"
+        android:maxLines="1"
+        android:singleLine="true"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/searchfriendsbackground"
         app:layout_constraintEnd_toStartOf="@+id/friends_button"

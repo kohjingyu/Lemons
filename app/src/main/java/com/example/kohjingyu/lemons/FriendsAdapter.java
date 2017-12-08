@@ -96,7 +96,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 Log.i("Angelia", stranger.toString());
                 int strangerID =  stranger.getInt("id");
 
-                Intent intent = new Intent(v.getContext(), StatsActivity.class);
+                Intent intent = new Intent(v.getContext(), StrangerProfileActivity.class);
                 intent.putExtra(putExtraKey, strangerID);
 
                 v.getContext().startActivity(intent);

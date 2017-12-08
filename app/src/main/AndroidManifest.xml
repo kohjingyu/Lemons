@@ -30,7 +30,7 @@
             android:name=".AccountActivity"
             android:label="@string/title_activity_account"
             android:parentActivityName=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".StatsActivity"
             android:parentActivityName=".AccountActivity" />
@@ -43,8 +43,10 @@
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".LoginActivity" />
-        <activity android:name=".FriendsActivityNew"
-            android:windowSoftInputMode="stateVisible|adjustPan"/>
+        <activity
+            android:name=".FriendsActivityNew"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity android:name=".StrangerProfileActivity"></activity>
     </application>
 
 </manifest>

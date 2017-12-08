@@ -38,6 +38,7 @@ public class StatsFragment extends Fragment {
     ImageView avatarImage;
 
     TextView usernameText;
+    TextView userLevel;
 
     Button addFriendButton;
 
@@ -81,6 +82,7 @@ public class StatsFragment extends Fragment {
         mentalProgressText = view.findViewById(R.id.mentalProgressText);
 
         usernameText = view.findViewById(R.id.usernameText);
+        userLevel = view.findViewById(R.id.userLevel);
 
         addFriendButton = view.findViewById(R.id.addfriendbutton);
         addFriendButton.setOnClickListener(new View.OnClickListener() {
@@ -143,29 +145,43 @@ public class StatsFragment extends Fragment {
 
         usernameText.setText(player.getName());
 
-        int academicScore = scores.getAcademics();
-        int academicMax = 1000;
+        int academicScoreRaw = scores.getAcademics();
+        int academicMax = 100;
+        int academicScoreAdjusted = academicScoreRaw % academicMax;
+        int academicQuotient = academicScoreRaw / academicMax;
         academicProgress.setMax(academicMax);
-        academicProgress.setProgress(academicScore);
-        academicProgressText.setText(academicScore + "/" + academicMax);
+        academicProgress.setProgress(academicScoreAdjusted);
+        academicProgressText.setText(academicScoreAdjusted + "/" + academicMax);
 
-        int fitnessScore = scores.getFitness();
-        int fitnessMax = 1000;
+        int fitnessScoreRaw = scores.getFitness();
+        int fitnessMax = 100;
+        int fitnessScoreAdjusted = fitnessScoreRaw%fitnessMax;
+        int fitnessQuotient = fitnessScoreRaw/fitnessMax;
         fitnessProgress.setMax(fitnessMax);
-        fitnessProgress.setProgress(fitnessScore);
-        fitnessProgressText.setText(fitnessScore + "/" + fitnessMax);
+        fitnessProgress.setProgress(fitnessScoreAdjusted);
+        fitnessProgressText.setText(fitnessScoreAdjusted + "/" + fitnessMax);
 
-        int dietScore = scores.getDiet();
-        int dietMax = 1000;
+        int dietScoreRaw = scores.getDiet();
+        int dietMax = 100;
+        int dietScoreAdjusted = dietScoreRaw%dietMax;
+        int dietQuotient = dietScoreRaw/dietMax;
         dietProgress.setMax(dietMax);
-        dietProgress.setProgress(dietScore);
-        dietProgressText.setText(dietScore + "/" + dietMax);
+        dietProgress.setProgress(dietScoreAdjusted);
+        dietProgressText.setText(dietScoreAdjusted + "/" + dietMax);
 
-        int mentalScore = scores.getMentalWellness();
-        int mentalMax = 1000;
+        int mentalScoreRaw = scores.getMentalWellness();
+        int mentalMax = 100;
+        int mentalScoreAdjusted = mentalScoreRaw % mentalMax;
+        int mentalQuotient = mentalScoreRaw/mentalMax;
         mentalProgress.setMax(mentalMax);
-        mentalProgress.setProgress(mentalScore);
-        mentalProgressText.setText(mentalScore + "/" + mentalMax);
+        mentalProgress.setProgress(mentalScoreAdjusted);
+        mentalProgressText.setText(mentalScoreAdjusted + "/" + mentalMax);
+
+
+        int level = (academicQuotient + dietQuotient + fitnessQuotient + mentalQuotient)/4;
+        String levelString = String.format("Level %s", (1+level));
+        userLevel.setText(levelString);
+
     }
 
     private class UpdateScores extends AsyncTask<Integer, Void, Boolean> {
