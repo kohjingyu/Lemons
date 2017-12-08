@@ -22,6 +22,10 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static com.example.kohjingyu.lemons.LoginActivity.performPostCall;
 
 
 public class StatsFragment extends Fragment {
@@ -87,21 +91,21 @@ public class StatsFragment extends Fragment {
         addFriendButton = view.findViewById(R.id.addfriendbutton);
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { //TODO implement add friend proper
-                Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
-
-//                addFriend addfriend = new addFriend();
-//                addfriend.execute();
+            public void onClick(View view) { //TODO check db
+                addFriend addfriend = new addFriend();
+                addfriend.execute();
             }
         });
 
-        avatarImage = (ImageView)view.findViewById(R.id.avatarImage);
-        GetAvatarTask getAvatarTask = new GetAvatarTask();
-        getAvatarTask.execute(String.valueOf(Player.getPlayer().getId()));
+        avatarImage = view.findViewById(R.id.avatarImage);
+
 
         Bundle bundle = this.getArguments();
         userId = bundle.getInt("userId");
         System.out.println(userId);
+
+        GetAvatarTask getAvatarTask = new GetAvatarTask();
+        getAvatarTask.execute(String.valueOf(userId));
 
 
         if(userId == Player.getPlayer().getId()) {
@@ -133,8 +137,6 @@ public class StatsFragment extends Fragment {
                 addFriendButton.setVisibility(View.VISIBLE);
                 addFriendButton.setEnabled(true);
             }
-
-
         }
         return view;
     }
@@ -200,43 +202,65 @@ public class StatsFragment extends Fragment {
     }
 
 
-//    private class addFriend extends  AsyncTask<Integer, Void, Boolean>{
-//
-//        @Override
-//        protected Boolean doInBackground(Integer... integers) {
-//            int requesterID = userId;
-//            int requesteeID = Player.getPlayer().getId();
-//
-//            try {
-//                JSONObject postParams = new JSONObject();
-//                postParams.put("requester", requesterID);
-//                postParams.put("requestee", requesteeID);
-//                String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
-//                Log.i("Angelia", String.valueOf(response.isEmpty()));
-//                JSONObject jsonObj = new JSONObject(response);
-//                boolean success = (boolean)jsonObj.get("success");
-//                if(success) {
-//                    Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
-//                    Player.getPlayer().updateFriends(); //refreshes list of friends
-//                }
-//                else {
-//                    String errorMessage = (String) jsonObj.get("message");
-//                    System.out.println(errorMessage);
-//                }
-//            }
-//            catch (JSONException ex) {
-//                ex.printStackTrace();
-//            }
-//
-//
-//            return true;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Boolean success){
-//            Log.i("Angelia","here");
-//        }
-//    }
+    private class addFriend extends AsyncTask<Integer, Void, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            int requesterID = userId;
+            int requesteeID = Player.getPlayer().getId();
+
+            try {
+                JSONObject postParams = new JSONObject();
+                postParams.put("requester", requesterID);
+                postParams.put("requestee", requesteeID);
+                String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
+
+                JSONObject jsonObj = new JSONObject(response);
+                boolean success = (boolean)jsonObj.get("success");
+
+                if(success) {
+                    Log.i("add friend", "player accepted stranger's friend request (requester = stranger, requestee = player)");
+                    return true;
+                }
+                else {
+                    String errorMessage = (String)jsonObj.get("message");
+                    System.out.println(errorMessage);
+                }
+
+                requesterID = Player.getPlayer().getId();
+                requesteeID = userId;
+
+                postParams = new JSONObject();
+                postParams.put("requester", requesterID);
+                postParams.put("requestee", requesteeID);
+                response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
+
+                jsonObj = new JSONObject(response);
+                success = (boolean)jsonObj.get("success");
+
+                if(success) {
+                    Log.i("add friend", "stranger accepted player's friend request (requester = player, requestee = player)");
+                    Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                else {
+                    String errorMessage = (String)jsonObj.get("message");
+                    System.out.println(errorMessage);
+                }
+            }
+            catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success){
+            Log.i("Angelia","here");
+        }
+    }
 
     private class GetPlayerInfo extends AsyncTask<Integer, Void, Boolean> {
         @Override
@@ -255,7 +279,6 @@ public class StatsFragment extends Fragment {
         }
     }
 
-
     private boolean userExists(JSONArray jsonArray, int idToFind){
         return jsonArray.toString().contains("\"id\":\""+idToFind+"\"");
     }
@@ -268,7 +291,6 @@ public class StatsFragment extends Fragment {
             URL avatarURL = AccountActivity.generateAvatarURL(params[0]);
             Bitmap avatar = null;
 
-            int i = 0;
             try {
                 if(avatarURL != null) {
                     Log.i("URL",avatarURL.toString());
@@ -283,9 +305,6 @@ public class StatsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Bitmap avatar){
-            // TODO: Find a better solution than scaling it
-            int avatarHeight = 500;
-            Bitmap newBitmap = Bitmap.createScaledBitmap(avatar, (int)(avatarHeight * avatar.getWidth()/avatar.getHeight()), avatarHeight, false);
             avatarImage.setImageBitmap(avatar);
         }
     }

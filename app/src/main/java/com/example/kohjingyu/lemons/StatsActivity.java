@@ -21,9 +21,10 @@ public class StatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
+        Intent intent = getIntent();
+        int id = intent.getIntExtra(FriendsAdapter.putExtraKey, 100);
 
-
-        StatsFragment statsFragment = StatsFragment.newInstance(getIntent().getIntExtra("id", Player.getPlayer().getId()));
+        StatsFragment statsFragment = StatsFragment.newInstance(id);
 
         getFragmentManager()
                 .beginTransaction()
