@@ -22,7 +22,7 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
 
         Intent intent = getIntent();
-        int id = intent.getIntExtra(FriendsAdapter.putExtraKey, 100);
+        int id = intent.getIntExtra(FriendsAdapter.putExtraKey, Player.getPlayer().getId());
 
         StatsFragment statsFragment = StatsFragment.newInstance(id);
 
