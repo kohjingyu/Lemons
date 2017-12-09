@@ -71,7 +71,7 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
             String activityName = playerActivities.get(position).getActivityType();
             int activityScore = playerActivities.get(position).getScore();
             String activityRemarks = playerActivities.get(position).getRemarks();
-            userInformationTextView.setText(activityName + "\n" + activityRemarks + "\n" + "Score: " + activityScore);
+            userInformationTextView.setText(activityName + "\n" + activityScore + " " + activityRemarks);
         }
 
         @Override
