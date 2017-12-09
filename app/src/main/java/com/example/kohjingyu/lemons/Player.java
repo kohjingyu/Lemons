@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -183,6 +184,7 @@ public class Player {
         private String activityType;
         private int score;
         private String remarks;
+        private Timestamp timestamp;
 
         public PlayerActivity(JSONObject jsonObject){
             try {
@@ -190,6 +192,10 @@ public class Player {
                 this.activityType = jsonObject.getString("activityType");
                 this.score = jsonObject.getInt("score");
                 this.remarks = jsonObject.getString("remarks");
+
+                String timestampStr = jsonObject.getString("timestamp");
+                this.timestamp = Timestamp.valueOf(timestampStr);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -203,9 +209,8 @@ public class Player {
         public int getScore() {
             return score;
         }
-        public String getRemarks() {
-            return remarks;
-        }
+        public String getRemarks() { return remarks; }
+        public Timestamp getTimestamp() { return timestamp; }
 
         @Override
         public String toString() {

@@ -6,11 +6,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kohjingyu.lemons.Player;
 import com.example.kohjingyu.lemons.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,35 +24,41 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class ShopActivity extends AppCompatActivity
-        implements EquipmentFragment.OnEquipmentSelectedListener, ShopCloneFragment.OnFragmentInteractionListener {
+public class ShopActivity extends AppCompatActivity implements ShopCloneFragment.OnFragmentInteractionListener, EquipmentFragment.OnEquipmentSelectedListener{
     TextView avatarName;
     HashMap<String, Integer> equipped;
     ImageView avatarImageView;
+    JSONObject equipments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
-
+        equipments = loadJSON(R.raw.equipments);
 
         avatarName = findViewById(R.id.username);
         avatarName.setText(Player.getPlayer().getUsername());
 
         EquipmentFragment equipmentFragment = new EquipmentFragment();
-
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-
         android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-
         fragmentTransaction.add(R.id.shop_container_1, equipmentFragment, "Equipment fragment");
-
         fragmentTransaction.commit();
         equipped = new HashMap<>();
+        loadAvatar();
+    }
+
+    public JSONArray getEquipments(String type){
+        JSONArray specificEquipments = null;
+        try {
+            specificEquipments = equipments.getJSONArray(type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return specificEquipments;
     }
 
     //This function is called when an item is clicked
-    @Override
     public void addEquipmentToAvatar(String type, int equipmentId) {
         //TODO link this function to url builder to change the image
         equipped.put(type, equipmentId);
@@ -59,6 +70,12 @@ public class ShopActivity extends AppCompatActivity
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadAvatar(){
+        Player player = Player.getPlayer();
+        URL avatarURL = player.mapleURLGenerator(player.getEquipped());
+        new UpdateAvatarTask().execute(avatarURL);
     }
 
     public String urlEquipmentBuilder(){
@@ -81,7 +98,31 @@ public class ShopActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        
+
+    }
+
+    public JSONObject loadJSON(int resourceId) {
+        String json = null;
+        JSONObject jsonObject = null;
+        try {
+            InputStream inputStream = getResources().openRawResource(resourceId);
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+            json = new String(buffer, "UTF-8");
+            Log.i("json", json);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+        try {
+            jsonObject = new JSONObject(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 
     public class UpdateAvatarTask extends AsyncTask<URL, Void, Bitmap> {

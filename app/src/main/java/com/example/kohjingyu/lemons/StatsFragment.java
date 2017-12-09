@@ -145,6 +145,7 @@ public class StatsFragment extends Fragment {
             getInfo.execute(userId);
 
             try{
+                Player.getPlayer().updateFriends();
                 JSONArray friendList = Player.getPlayer().getFriends();
                 Log.i("add friend", "friend list: "+ friendList.toString());
 

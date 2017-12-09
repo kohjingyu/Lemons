@@ -1,5 +1,6 @@
 package com.example.kohjingyu.lemons;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -69,11 +70,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerTask = new UserRegisterTask(email, password, username, displayName);
         registerTask.execute((Void) null);
 
-        // TODO: Check if email is valid
-        // TODO: Check if email/username is already taken
-
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        RegisterActivity.this.startActivity(intent);
+        //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        //RegisterActivity.this.startActivity(intent);
     }
 
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
@@ -92,17 +90,29 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-
             JSONObject postParams = new JSONObject();
             try {
                 postParams.put("username", username);
                 postParams.put("name", displayName);
                 postParams.put("email", email);
                 postParams.put("password", password);
-                LoginActivity.performPostCall("http://devostrum.no-ip.info:12345/user", postParams);
-                return true;
+                String response = LoginActivity.performPostCall("http://devostrum.no-ip.info:12345/user", postParams);
+                JSONObject jsonObj = new JSONObject(response);
+
+                boolean success = (boolean)jsonObj.get("success");
+
+                if(success) {
+                    return true;
+                }
+                else {
+                    final String errorMessage = (String)jsonObj.get("message");
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return false;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -117,8 +127,6 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 RegisterActivity.this.startActivity(intent);
-            } else {
-                Toast.makeText(context, "Error registering. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
 

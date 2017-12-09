@@ -64,7 +64,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             for (int i = 0; i < leaderboardList.length(); i++) {
                 response = "";
                 JSONObject temp = leaderboardList.getJSONObject(i); //each friend jsonobject containing userid
-                String userId = String.valueOf(temp.getInt("userId"));
+                String userId = String.valueOf(temp.getInt("id"));
                 Log.i("userId", userId);
                 try {
                     URL url = new URL(BASE_URL + "/avatar?userId=" + userId);
