@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 
@@ -67,11 +68,17 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
         }
 
         public void bind(int position){
+            Player.PlayerActivity activity = playerActivities.get(position);
+
             userInformationTextView = this.v.findViewById(R.id.viewholder_textview);
-            String activityName = playerActivities.get(position).getActivityType();
-            int activityScore = playerActivities.get(position).getScore();
-            String activityRemarks = playerActivities.get(position).getRemarks();
-            userInformationTextView.setText(activityName + "\n" + activityScore + " " + activityRemarks);
+            String activityName = activity.getActivityType();
+            int activityScore = activity.getScore();
+            String activityRemarks = activity.getRemarks();
+            Timestamp timestamp = activity.getTimestamp();
+
+            // TODO: Format timestamp
+
+            userInformationTextView.setText(activityName + " (" + timestamp + ")" + "\n" + activityScore + " " + activityRemarks);
         }
 
         @Override
