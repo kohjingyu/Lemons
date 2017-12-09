@@ -19,7 +19,8 @@ import android.widget.ImageView;
 import com.example.kohjingyu.lemons.Player;
 import com.example.kohjingyu.lemons.R;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,9 +36,9 @@ import java.net.URL;
  */
 public class ShopCloneFragment extends Fragment {
     private static final String ARG_ITEM_TYPE = "itemType";
-    private String mItemType;
+    public String mItemType;
+    private JSONArray equipments;
     private int[] itemId = {1000003, 1001112, 1002257, 1003686, 1004169, 1004754};
-    private JSONObject jsonObject; //TODO: use jsonobject instead of array
     private OnFragmentInteractionListener mListener;
 
     public ShopCloneFragment() {
@@ -65,6 +66,7 @@ public class ShopCloneFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mItemType = getArguments().getString(ARG_ITEM_TYPE);
         }
@@ -76,16 +78,22 @@ public class ShopCloneFragment extends Fragment {
         View view  = inflater.inflate(R.layout.shop_item_display_new, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setAdapter(new ImageAdapter(getContext()));
+        equipments = ((ShopActivity)getParentFragment().getActivity()).getEquipments(mItemType); // get equipments for this tab
+
+        Log.i("equipments",equipments.toString());
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 Player player = Player.getPlayer();
-                player.addEquipment(mItemType, itemId[position]);
+                try {
+                    player.addEquipment(mItemType, equipments.getJSONObject(position).getInt("id"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 URL avatarURL = player.mapleURLGenerator(player.getEquipped());
                 Log.i("url", avatarURL.toString());
                 new GetAvatarTask().execute(avatarURL);
-
 
             }
         });
@@ -103,6 +111,7 @@ public class ShopCloneFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -116,6 +125,7 @@ public class ShopCloneFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -134,6 +144,7 @@ public class ShopCloneFragment extends Fragment {
 
     public class ImageAdapter extends BaseAdapter {
         private Context mContext;
+        private int[] itemIds;
 
         public ImageAdapter(Context c) {
             mContext = c;
@@ -156,7 +167,16 @@ public class ShopCloneFragment extends Fragment {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View view = inflater.inflate(R.layout.shop_item_display_viewholder,parent,false);
             ImageView imageView = view.findViewById(R.id.shop_item);
-            imageView.setImageResource(mThumbIds[position]);
+            String filename = "avatar";
+            String packageName = getContext().getPackageName();
+            String typeOfResource = "drawable";
+            try {
+                 filename = mItemType + equipments.getJSONObject(position).getInt("id");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            int resId = getContext().getResources().getIdentifier(filename, typeOfResource, packageName);
+            imageView.setImageResource(resId);
             return view;
 
         }
@@ -166,6 +186,8 @@ public class ShopCloneFragment extends Fragment {
                 R.drawable.shopitem1,R.drawable.shopitem2,R.drawable.shopitem3,R.drawable.shopitem4,R.drawable.shopitem5,R.drawable.shopitem6
         };
     }
+
+
 
     public class GetAvatarTask extends AsyncTask<URL, Void, Bitmap> {
 

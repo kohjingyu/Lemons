@@ -1,134 +1,133 @@
-[
-  {
-    "hat": [
-      {
-        "id": 1000003,
-        "name": "Scream Mask"
-      },
-      {
-        "id": 1001112,
-        "name": "Penguin Hood"
-      },
-      {
-        "id": 1002257,
-        "name": "Blue Mushroom Hat"
-      },
-      {
-        "id": 1003686,
-        "name": "Brown Paperbag Mask"
-      },
-      {
-        "id": 1004169,
-        "name": "Fried Egg Head"
-      },
-      {
-        "id": 1002458,
-        "name": "Horoscope Hat (Aries)"
-      }
-    ],
-    "top": [
-      {
-        "id": 1042343,
-        "name": "Black Hip Hop"
-      },
-      {
-        "id": 1040001,
-        "name": "Black Blazer"
-      },
-      {
-        "id": 1040016,
-        "name": "Orihalcon Master Sergeant"
-      },
-      {
-        "id": 1042031,
-        "name": "Orange Mushroom T-shirt"
-      },
-      {
-        "id": 1042142,
-        "name": "Rainbow Top"
-      },
-      {
-        "id": 1042263,
-        "name": "Funky Jumper"
-      }
-    ],
-    "bottom": [
-      {
-        "id": 1060031,
-        "name": "Blue Pao Bottom"
-      },
-      {
-        "id": 1060103,
-        "name": "Hawaiian Skirt"
-      },
-      {
-        "id": 1060092,
-        "name": "Orihalcon Platine Pants"
-      },
-      {
-        "id": 1062068,
-        "name": "Rainbow Shorts"
-      },
-      {
-        "id": 1062167,
-        "name": "Trixter Ranger Pants"
-      },
-      {
-        "id": 1061110,
-        "name": "Pink Training Shorts"
-      }
-    ],
-    "shoes": [
-      {
-        "id": 1070060,
-        "name": "Kristoff Shoes"
-      },
-      {
-        "id": 1072233,
-        "name": "Bear Shoes"
-      },
-      {
-        "id": 1072260,
-        "name": "Penguin Slippers"
-      },
-      {
-        "id": 1072186,
-        "name": "Gold Kitty Slippers"
-      },
-      {
-        "id": 1073037,
-        "name": "Cutie Bunny Shoes"
-      },
-      {
-        "id": 1072660,
-        "name": "Maple Amethysian Shoes"
-      }
-    ],
-    "mount": [
-      {
-        "id": 1902021,
-        "name": "Robot"
-      },
-      {
-        "id": 1932026,
-        "name": "Ostrich"
-      },
-      {
-        "id": 1932062,
-        "name": "Chicken"
-      },
-      {
-        "id": 1902024,
-        "name": "Pegasus"
-      },
-      {
-        "id": 1932072,
-        "name": "Pachinko Robo"
-      },
-      {
-        "id": 1902049,
-        "name": "Napoleon Mount"
-      }
-    ]
-  }
-]
+
+{
+  "hat": [
+    {
+      "id": 1000003,
+      "name": "Scream Mask"
+    },
+    {
+      "id": 1001112,
+      "name": "Penguin Hood"
+    },
+    {
+      "id": 1002257,
+      "name": "Blue Mushroom Hat"
+    },
+    {
+      "id": 1003686,
+      "name": "Brown Paperbag Mask"
+    },
+    {
+      "id": 1004169,
+      "name": "Fried Egg Head"
+    },
+    {
+      "id": 1002458,
+      "name": "Horoscope Hat (Aries)"
+    }
+  ],
+  "top": [
+    {
+      "id": 1042343,
+      "name": "Black Hip Hop"
+    },
+    {
+      "id": 1040001,
+      "name": "Black Blazer"
+    },
+    {
+      "id": 1040016,
+      "name": "Orihalcon Master Sergeant"
+    },
+    {
+      "id": 1042031,
+      "name": "Orange Mushroom T-shirt"
+    },
+    {
+      "id": 1042142,
+      "name": "Rainbow Top"
+    },
+    {
+      "id": 1042263,
+      "name": "Funky Jumper"
+    }
+  ],
+  "bottom": [
+    {
+      "id": 1060031,
+      "name": "Blue Pao Bottom"
+    },
+    {
+      "id": 1060103,
+      "name": "Hawaiian Skirt"
+    },
+    {
+      "id": 1060092,
+      "name": "Orihalcon Platine Pants"
+    },
+    {
+      "id": 1062068,
+      "name": "Rainbow Shorts"
+    },
+    {
+      "id": 1062167,
+      "name": "Trixter Ranger Pants"
+    },
+    {
+      "id": 1061110,
+      "name": "Pink Training Shorts"
+    }
+  ],
+  "shoes": [
+    {
+      "id": 1070060,
+      "name": "Kristoff Shoes"
+    },
+    {
+      "id": 1072233,
+      "name": "Bear Shoes"
+    },
+    {
+      "id": 1072260,
+      "name": "Penguin Slippers"
+    },
+    {
+      "id": 1072186,
+      "name": "Gold Kitty Slippers"
+    },
+    {
+      "id": 1073037,
+      "name": "Cutie Bunny Shoes"
+    },
+    {
+      "id": 1072660,
+      "name": "Maple Amethysian Shoes"
+    }
+  ],
+  "mount": [
+    {
+      "id": 1902021,
+      "name": "Robot"
+    },
+    {
+      "id": 1932026,
+      "name": "Ostrich"
+    },
+    {
+      "id": 1932062,
+      "name": "Chicken"
+    },
+    {
+      "id": 1902024,
+      "name": "Pegasus"
+    },
+    {
+      "id": 1932072,
+      "name": "Pachinko Robo"
+    },
+    {
+      "id": 1902049,
+      "name": "Napoleon Mount"
+    }
+  ]
+}
