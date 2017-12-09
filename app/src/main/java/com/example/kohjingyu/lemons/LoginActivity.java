@@ -342,7 +342,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 else {
                     String errorMessage = (String)jsonObj.get("message");
-//                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
                     System.out.println(errorMessage);
                 }
             }
@@ -421,38 +421,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             e.printStackTrace();
         }
 
-        return response;
-    }
-
-    public static String  performGetCall(String requestURL, JSONObject getDataParams) {
-        URL url;
-        String response = "";
-        try {
-
-            url = new URL(requestURL);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-
-            int responseCode=conn.getResponseCode();
-
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line=br.readLine()) != null) {
-                    response += line;
-                }
-            }
-            else {
-                response = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return response;
     }
 }
