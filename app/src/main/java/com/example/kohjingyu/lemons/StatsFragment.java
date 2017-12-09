@@ -24,11 +24,17 @@ import java.net.URL;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import static com.example.kohjingyu.lemons.LoginActivity.performPostCall;
 
 
 public class StatsFragment extends Fragment {
+
+    TextView academicLevel;
+    TextView fitnessLevel;
+    TextView dietLevel;
+    TextView mentalLevel;
 
     ProgressBar academicProgress;
     TextView academicProgressText;
@@ -49,6 +55,18 @@ public class StatsFragment extends Fragment {
     int userId;
     Player player;
 
+    public static int level;
+    public static int academicMilestone;
+    public static int fitnessMilestone;
+    public static int dietMilestone;
+    public static int mentalMilestone;
+
+    public static final String ACADEMICS = "Academics";
+    public static final String FITNESS = "Fitness";
+    public static final String DIET = "Diet";
+    public static final String MENTAL = "Mental Wellness";
+
+
     public static final String key = "StatsFragmentMessage";
 
     public static StatsFragment newInstance(int userId) {
@@ -62,7 +80,6 @@ public class StatsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.stats_fragment, container, false);
 
         academicProgress = view.findViewById(R.id.academicProgress);
@@ -87,6 +104,11 @@ public class StatsFragment extends Fragment {
 
         usernameText = view.findViewById(R.id.usernameText);
         userLevel = view.findViewById(R.id.userLevel);
+
+        academicLevel = view.findViewById(R.id.academicLevel);
+        fitnessLevel = view.findViewById(R.id.fitnessLevel);
+        dietLevel = view.findViewById(R.id.dietLevel);
+        mentalLevel = view.findViewById(R.id.mentalLevel);
 
         addFriendButton = view.findViewById(R.id.addfriendbutton);
         addFriendButton.setOnClickListener(new View.OnClickListener() {
@@ -154,41 +176,49 @@ public class StatsFragment extends Fragment {
         usernameText.setText(player.getName());
 
         int academicScoreRaw = scores.getAcademics();
-        int academicMax = 100;
-        int academicScoreAdjusted = academicScoreRaw % academicMax;
-        int academicQuotient = academicScoreRaw / academicMax;
-        academicProgress.setMax(academicMax);
-        academicProgress.setProgress(academicScoreAdjusted);
-        academicProgressText.setText(academicScoreAdjusted + "/" + academicMax);
-
         int fitnessScoreRaw = scores.getFitness();
-        int fitnessMax = 100;
-        int fitnessScoreAdjusted = fitnessScoreRaw%fitnessMax;
-        int fitnessQuotient = fitnessScoreRaw/fitnessMax;
-        fitnessProgress.setMax(fitnessMax);
-        fitnessProgress.setProgress(fitnessScoreAdjusted);
-        fitnessProgressText.setText(fitnessScoreAdjusted + "/" + fitnessMax);
-
         int dietScoreRaw = scores.getDiet();
-        int dietMax = 100;
-        int dietScoreAdjusted = dietScoreRaw%dietMax;
-        int dietQuotient = dietScoreRaw/dietMax;
-        dietProgress.setMax(dietMax);
-        dietProgress.setProgress(dietScoreAdjusted);
-        dietProgressText.setText(dietScoreAdjusted + "/" + dietMax);
-
         int mentalScoreRaw = scores.getMentalWellness();
-        int mentalMax = 100;
-        int mentalScoreAdjusted = mentalScoreRaw % mentalMax;
-        int mentalQuotient = mentalScoreRaw/mentalMax;
-        mentalProgress.setMax(mentalMax);
-        mentalProgress.setProgress(mentalScoreAdjusted);
-        mentalProgressText.setText(mentalScoreAdjusted + "/" + mentalMax);
 
+        statsManager(ACADEMICS, academicScoreRaw, academicMilestone, academicProgress, academicProgressText, academicLevel);
+        statsManager(FITNESS, fitnessScoreRaw, fitnessMilestone, fitnessProgress, fitnessProgressText, fitnessLevel);
+        statsManager(DIET, dietScoreRaw, dietMilestone, dietProgress, dietProgressText, dietLevel);
+        statsManager(MENTAL, mentalScoreRaw, mentalMilestone, mentalProgress, mentalProgressText, mentalLevel);
 
-        int level = (academicQuotient + dietQuotient + fitnessQuotient + mentalQuotient)/4;
+        //TODO edit xml to say Mental Wellness instead of just mental
+
+        int tempLevel = (academicMilestone + dietMilestone + fitnessMilestone + mentalMilestone)/4;
+        if(tempLevel>level){
+            //alert dialogue
+            Toast.makeText(getActivity(), "Congrats! Level up-ed from "+ level + " to " + tempLevel, Toast.LENGTH_SHORT).show();
+            level = tempLevel;
+        }
         String levelString = String.format("Level %s", (1+level));
         userLevel.setText(levelString);
+
+    }
+
+    public void statsManager(String category, int rawScore, int previousMilestone, ProgressBar progressBar, TextView textView, TextView categoryLevel){
+
+        int max = 100;
+        int adjustedScore = rawScore%max;
+        int milestone = rawScore/max;
+        progressBar.setMax(max);
+        progressBar.setProgress(adjustedScore);
+        String progress = adjustedScore + "/" + max;
+        textView.setText(progress);
+
+        if(milestone>previousMilestone){
+            String message = String.format("Congratulations! Reached new Milestone for %s!", category);
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        }
+        String categoryLevelMessage = String.format("%s (Level %s): ", category, milestone+1);
+        categoryLevel.setText(categoryLevelMessage);
+
+        if (category.equals(ACADEMICS)) academicMilestone = milestone;
+        if (category.equals(FITNESS)) fitnessMilestone = milestone;
+        if (category.equals(DIET)) dietMilestone = milestone;
+        if (category.equals(MENTAL)) mentalMilestone = milestone;
 
     }
 

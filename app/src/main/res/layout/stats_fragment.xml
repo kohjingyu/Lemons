@@ -24,7 +24,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/fab_margin"
+        android:paddingRight="@dimen/fab_margin">
 
         <ImageView
             android:id="@+id/avatarImage"
@@ -51,9 +53,10 @@
             android:layout_gravity="center" />
 
         <TextView
+            android:id="@+id/academicLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Academics: "
+            android:text="Academics (Level x): "
             android:fontFamily="@font/adobe_gothic_bold"
             android:paddingTop="@dimen/fab_margin_small"
             android:paddingBottom="@dimen/fab_margin_small"
@@ -86,10 +89,10 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/fitnessLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fitness: "
-            android:fontFamily="@font/adobe_gothic_bold"
+            android:text="Fitness (Level x): "
             android:paddingTop="@dimen/fab_margin_small"
             android:paddingBottom="@dimen/fab_margin_small"
             android:paddingLeft="@dimen/fab_margin"
@@ -118,10 +121,10 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/dietLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Diet: "
-            android:fontFamily="@font/adobe_gothic_bold"
+            android:text="Diet (Level x): "
             android:paddingTop="@dimen/fab_margin_small"
             android:paddingBottom="@dimen/fab_margin_small"
             android:paddingLeft="@dimen/fab_margin"
@@ -150,9 +153,10 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/mentalLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mental: "
+            android:text="Mental Wellness (Level x): "
             android:fontFamily="@font/adobe_gothic_bold"
             android:paddingTop="@dimen/fab_margin_small"
             android:paddingBottom="@dimen/fab_margin_small"
