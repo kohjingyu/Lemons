@@ -1,13 +1,15 @@
 package com.example.kohjingyu.lemons;
 
-import android.app.Fragment;
+
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +26,18 @@ import java.net.URL;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
+
 
 import static com.example.kohjingyu.lemons.LoginActivity.performPostCall;
+import static com.example.kohjingyu.lemons.Player.ACADEMICS;
+import static com.example.kohjingyu.lemons.Player.DIET;
+import static com.example.kohjingyu.lemons.Player.FITNESS;
+import static com.example.kohjingyu.lemons.Player.MENTAL;
+import static com.example.kohjingyu.lemons.Player.academicMilestone;
+import static com.example.kohjingyu.lemons.Player.dietMilestone;
+import static com.example.kohjingyu.lemons.Player.fitnessMilestone;
+import static com.example.kohjingyu.lemons.Player.level;
+import static com.example.kohjingyu.lemons.Player.mentalMilestone;
 
 
 public class StatsFragment extends Fragment {
@@ -54,17 +65,6 @@ public class StatsFragment extends Fragment {
 
     int userId;
     Player player;
-
-    public static int level;
-    public static int academicMilestone;
-    public static int fitnessMilestone;
-    public static int dietMilestone;
-    public static int mentalMilestone;
-
-    public static final String ACADEMICS = "Academics";
-    public static final String FITNESS = "Fitness";
-    public static final String DIET = "Diet";
-    public static final String MENTAL = "Mental Wellness";
 
 
     public static final String key = "StatsFragmentMessage";
@@ -189,8 +189,11 @@ public class StatsFragment extends Fragment {
 
         int tempLevel = (academicMilestone + dietMilestone + fitnessMilestone + mentalMilestone)/4;
         if(tempLevel>level){
-            //alert dialogue
-            Toast.makeText(getActivity(), "Congrats! Level up-ed from "+ level + " to " + tempLevel, Toast.LENGTH_SHORT).show();
+            LevelUpAlertDialogFragment alertDialogFragment = new LevelUpAlertDialogFragment();
+            android.support.v4.app.FragmentManager fm = getFragmentManager();
+            alertDialogFragment.show(fm, "level up alert dialog");
+
+//            Toast.makeText(getActivity(), "Congrats! Level up-ed from "+ level + " to " + tempLevel, Toast.LENGTH_SHORT).show();
             level = tempLevel;
         }
         String levelString = String.format("Level %s", (1+level));
@@ -199,7 +202,8 @@ public class StatsFragment extends Fragment {
     }
 
     public void statsManager(String category, int rawScore, int previousMilestone, ProgressBar progressBar, TextView textView, TextView categoryLevel){
-
+        //TODO after i visit another stats profile the dialog and toasts appear
+        //TODO toasts overlap w alert dialog....use alert dialog?
         int max = 100;
         int adjustedScore = rawScore%max;
         int milestone = rawScore/max;
@@ -210,7 +214,19 @@ public class StatsFragment extends Fragment {
 
         if(milestone>previousMilestone){
             String message = String.format("Congratulations! Reached new Milestone for %s!", category);
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
+            View layout = getLayoutInflater().inflate(R.layout.custom_toast,
+                    (ViewGroup) this.getActivity().findViewById(R.id.custom_toast_container));
+
+            TextView text = layout.findViewById(R.id.customToastText);
+            text.setText(message);
+
+            Toast toast = new Toast(getActivity());
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
+
         }
         String categoryLevelMessage = String.format("%s (Level %s): ", category, milestone+1);
         categoryLevel.setText(categoryLevelMessage);
@@ -251,13 +267,13 @@ public class StatsFragment extends Fragment {
                 JSONObject postParams = new JSONObject();
                 postParams.put("requester", requesterID);
                 postParams.put("requestee", requesteeID);
-                try{ //TODO fix thissss, check backend
+                try{
                     String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
                     JSONObject jsonObj = new JSONObject(response);
                     boolean success = (boolean)jsonObj.get("success");
 
                     if(success) {
-                        Log.i("add friend", "player accepted stranger's friend request (requester = stranger, requestee = player)");
+//                        Log.i("add friend", "player accepted stranger's friend request (requester = stranger, requestee = player)");
                         return true;
                     }
                     else {
@@ -267,8 +283,6 @@ public class StatsFragment extends Fragment {
                 }catch (Exception ex){
                     ex.printStackTrace();
                 }
-
-
 
                 requesterID = Player.getPlayer().getId();
                 requesteeID = userId;
@@ -283,7 +297,7 @@ public class StatsFragment extends Fragment {
                     boolean success = (boolean)jsonObj.get("success");
 
                     if(success) {
-                        Log.i("add friend", "stranger accepted player's friend request (requester = player, requestee = player)");
+//                        Log.i("add friend", "stranger accepted player's friend request (requester = player, requestee = player)");
                         return true;
                     }
                     else {
@@ -293,6 +307,8 @@ public class StatsFragment extends Fragment {
                 }catch (Exception ex){
                     ex.printStackTrace();
                 }
+
+                Player.getPlayer().updateFriends();
             }
             catch (JSONException ex) {
                 ex.printStackTrace();

@@ -23,6 +23,18 @@ public class Player {
     public static final String BASE_URL = "http://devostrum.no-ip.info:12345";
     public final String MAPLE_URL_HEAD = "https://labs.maplestory.io/api/gms/latest/character/center/2000/20001,30037";
     public final String MAPLE_URL_TAIL = "/stand1?showears=false&resize=1";
+
+    //for stats activity
+    public static int level;
+    public static int academicMilestone;
+    public static int fitnessMilestone;
+    public static int dietMilestone;
+    public static int mentalMilestone;
+    public static final String ACADEMICS = "Academics";
+    public static final String FITNESS = "Fitness";
+    public static final String DIET = "Diet";
+    public static final String MENTAL = "Mental Wellness";
+
     private int id;
     private String name;
     private String username;
@@ -110,8 +122,6 @@ public class Player {
 
     }
 
-
-
     private String generateGetScoreRequestURL(JSONObject getParams){
         String requestURL = "http://devostrum.no-ip.info:12345/score?";
         Iterator<String> jsonIterator = getParams.keys();
@@ -151,6 +161,11 @@ public class Player {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        level = 1;
+        academicMilestone = 1;
+        dietMilestone = 1;
+        fitnessMilestone =1;
+        mentalMilestone =1;
     }
 
     public Player(int id, String name, String email,
