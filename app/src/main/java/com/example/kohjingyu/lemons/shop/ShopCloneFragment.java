@@ -158,6 +158,7 @@ public class ShopCloneFragment extends Fragment {
             ImageView imageView = view.findViewById(R.id.shop_item);
             imageView.setImageResource(mThumbIds[position]);
             return view;
+
         }
 
         // references to our images
