@@ -444,4 +444,44 @@ public class Player {
         return null;
     }
 
+
+    public  int getLevel() {
+        return level;
+    }
+
+    public  void setLevel(int level) {
+        Player.level = level;
+    }
+
+    public  int getAcademicMilestone() {
+        return academicMilestone;
+    }
+
+    public  void setAcademicMilestone(int academicMilestone) {
+        Player.academicMilestone = academicMilestone;
+    }
+
+    public  int getFitnessMilestone() {
+        return fitnessMilestone;
+    }
+
+    public  void setFitnessMilestone(int fitnessMilestone) {
+        Player.fitnessMilestone = fitnessMilestone;
+    }
+
+    public  int getDietMilestone() {
+        return dietMilestone;
+    }
+
+    public  void setDietMilestone(int dietMilestone) {
+        Player.dietMilestone = dietMilestone;
+    }
+
+    public  int getMentalMilestone() {
+        return mentalMilestone;
+    }
+
+    public  void setMentalMilestone(int mentalMilestone) {
+        Player.mentalMilestone = mentalMilestone;
+    }
 }
