@@ -13,16 +13,7 @@
         android:src="@drawable/customtoast"
         android:layout_gravity="center"
         android:background="@android:color/transparent"
-        android:paddingTop="@dimen/fab_margin"
         />
-
-    <TextView
-        android:id="@+id/customToastText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Congrats!"
-        android:layout_gravity="center"
-        android:padding="@dimen/fab_margin"/>
 
 
 </LinearLayout>

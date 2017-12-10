@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ public class LevelUpAlertDialogFragment extends AppCompatDialogFragment {
         View v = LayoutInflater.from(getActivity())
                 .inflate(R.layout.fragment_level_up_alert_dialog, null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return new AlertDialog.Builder(getActivity())
                 .setCancelable(true)
                 .setView(v)
