@@ -44,7 +44,7 @@ public class Player {
     private ArrayList<PlayerActivity> playerActivities;
     private Scores scores;
     private static Player player;
-    private JSONObject equipped = new JSONObject();
+    private static JSONObject equipped = new JSONObject();
 
     public static Player getPlayer() {
         return player;

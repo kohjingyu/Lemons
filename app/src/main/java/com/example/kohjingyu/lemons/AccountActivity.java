@@ -64,6 +64,13 @@ public class AccountActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        GetAvatarTask getAvatarTask = new GetAvatarTask();
+        getAvatarTask.execute(String.valueOf(Player.getPlayer().getId()));
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -100,6 +107,7 @@ public class AccountActivity extends AppCompatActivity
         @Override
         protected Bitmap doInBackground(String... params){
             URL avatarURL = generateAvatarURL(params[0]);
+            Player.getPlayer().updateFriends();
             Bitmap avatar = null;
 
             int i = 0;

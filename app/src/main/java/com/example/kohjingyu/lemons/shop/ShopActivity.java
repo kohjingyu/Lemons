@@ -7,9 +7,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.kohjingyu.lemons.LoginActivity;
 import com.example.kohjingyu.lemons.Player;
 import com.example.kohjingyu.lemons.R;
 
@@ -111,7 +114,6 @@ public class ShopActivity extends AppCompatActivity implements ShopCloneFragment
             inputStream.read(buffer);
             inputStream.close();
             json = new String(buffer, "UTF-8");
-            Log.i("json", json);
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
@@ -123,6 +125,50 @@ public class ShopActivity extends AppCompatActivity implements ShopCloneFragment
             e.printStackTrace();
         }
         return jsonObject;
+    }
+
+    public void onClickSaveEquipments(View view) {
+        new UpdateServerEquipmentTask().execute();
+    }
+
+    public class UpdateServerEquipmentTask extends AsyncTask<Void, Void, Boolean> {
+
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            Player player = Player.getPlayer();
+            JSONObject postParams = new JSONObject();
+            JSONObject equipmentParams = player.getEquipped();
+            try {
+                equipmentParams.put("userId",player.getId());
+                postParams.put("user",equipmentParams);
+                Log.i("postParams", postParams.toString());
+                String response = "";
+                response = LoginActivity.performPostCall("http://devostrum.no-ip.info:12345/avatar", postParams); //response returning null
+                Log.i("ShopUpdateEquipment", response);
+                JSONObject responseJson = new JSONObject(response);
+                boolean success = responseJson.getBoolean("success");
+
+                if (!success){
+                    Log.i("ShopUpdateEquipment", responseJson.getString("message"));
+                }
+                return success;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return false;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success){
+            if (success){
+                return;
+            } else {
+                Toast.makeText(getBaseContext(), "Equipment not saved, please try again later", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
     public class UpdateAvatarTask extends AsyncTask<URL, Void, Bitmap> {

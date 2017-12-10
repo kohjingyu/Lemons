@@ -42,26 +42,14 @@ public class FriendsActivityNew extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject1 = new JSONObject();
-        JSONObject jsonObject2 = new JSONObject();
-        try {
-            jsonObject1.put("name", "Vincent");
-            jsonObject1.put("username", "vincentcent");
-            jsonObject2.put("name", "Vincent Setiawan");
-            jsonObject2.put("username", "vincentcentcent");
-            jsonArray.put(jsonObject1);
-            jsonArray.put(jsonObject2);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        bitmaps = new Bitmap[2];
-        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
-        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
-        bitmaps[0] = bitmap1;
-        bitmaps[1] = bitmap2;
+        JSONArray friendsList = new JSONArray();
 
-        friendsAdapter = new FriendsAdapter(this, jsonArray,bitmaps);
+        friendsJSONArray = Player.getPlayer().getFriends();
+        Log.i("friends", friendsList.toString());
+        bitmaps = generateNakedAvatars(friendsList.length());
+        new GetAvatarTask().execute(friendsJSONArray);
+
+        friendsAdapter = new FriendsAdapter(this, friendsList,bitmaps);
 
         recyclerView.setAdapter(friendsAdapter);
 
@@ -150,10 +138,12 @@ public class FriendsActivityNew extends AppCompatActivity {
         getFriendsTask.execute(url);
     }
 
+    //AsyncTask to generate the avatar for each user
     public class GetAvatarTask extends AsyncTask<JSONArray, Void, Bitmap[]> {
 
         @Override
         protected Bitmap[] doInBackground(JSONArray... jsonArrays){
+            //Generate the maple url by getting the equipment id from the server
             URL[] avatarURLs = generateFriendsAvatarsURL(jsonArrays[0]);
 
             Bitmap[] avatars = new Bitmap[avatarURLs.length]; //Create new array of bitmap with length depending on the url
@@ -163,6 +153,7 @@ public class FriendsActivityNew extends AppCompatActivity {
                 tempurl = avatarURLs[i];
                 try {
                     if(tempurl != null) {
+                        //get the pictures from the server
                         Log.i("URL",tempurl.toString());
                         InputStream in = tempurl.openStream();
                         avatars[i] = BitmapFactory.decodeStream(in);
@@ -183,6 +174,7 @@ public class FriendsActivityNew extends AppCompatActivity {
         }
     }
 
+    //Async Task to get the arrays of users returned by the search from the server
     public class GetFriendsTask extends AsyncTask<URL, Void, JSONArray> {
 
         @Override
@@ -202,7 +194,7 @@ public class FriendsActivityNew extends AppCompatActivity {
                     while ((line = br.readLine()) != null) {
                         response += line;
                     }
-                    Log.i("searchf response", response);
+//                    Log.i("Response", response);
                 } else {
                     response = null;
                     Log.i("searchf HTTP", "Connection not successful");
@@ -229,9 +221,11 @@ public class FriendsActivityNew extends AppCompatActivity {
         @Override
         protected void onPostExecute(JSONArray friendList){
             Bitmap[] tempAvatars = generateNakedAvatars(friendList.length());
+            // update the adapter with the user info first while getting the images
             friendsAdapter.update(friendList,tempAvatars);
             friendsAdapter.notifyDataSetChanged();
 
+            //Get the avatar pictures since we have the equipment id now
             GetAvatarTask getAvatarTask = new GetAvatarTask();
             getAvatarTask.execute(friendList);
         }

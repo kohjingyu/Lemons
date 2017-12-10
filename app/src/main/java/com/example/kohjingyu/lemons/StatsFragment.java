@@ -60,6 +60,8 @@ public class StatsFragment extends Fragment {
     int userId;
     Player player;
 
+    JSONArray friendsJSONArray;
+
 
     public static final String key = "StatsFragmentMessage";
 
@@ -115,7 +117,6 @@ public class StatsFragment extends Fragment {
 
         avatarImage = view.findViewById(R.id.avatarImage);
 
-
         Bundle bundle = this.getArguments();
         userId = bundle.getInt("userId");
         System.out.println(userId);
@@ -123,6 +124,25 @@ public class StatsFragment extends Fragment {
         GetAvatarTask getAvatarTask = new GetAvatarTask();
         getAvatarTask.execute(String.valueOf(userId));
 
+        // Check if they are already friends
+        friendsJSONArray = Player.getPlayer().getFriends();
+        System.out.println("Friends: " + friendsJSONArray);
+
+        for(int i = 0; i < friendsJSONArray.length(); i ++) {
+            try {
+                JSONObject obj = friendsJSONArray.getJSONObject(i);
+                int id = obj.getInt("id");
+
+                // Check if they are already friends
+                if(id == userId) {
+                    addFriendButton.setVisibility(View.INVISIBLE);
+                    addFriendButton.setEnabled(false);
+                    break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         if(userId == Player.getPlayer().getId()) {
             player = Player.getPlayer();

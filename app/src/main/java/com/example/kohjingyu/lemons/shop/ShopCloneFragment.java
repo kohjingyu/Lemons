@@ -80,8 +80,6 @@ public class ShopCloneFragment extends Fragment {
         gridView.setAdapter(new ImageAdapter(getContext()));
         equipments = ((ShopActivity)getParentFragment().getActivity()).getEquipments(mItemType); // get equipments for this tab
 
-        Log.i("equipments",equipments.toString());
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {

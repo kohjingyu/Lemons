@@ -1,3 +1,4 @@
+
 package com.example.kohjingyu.lemons;
 
 import android.content.Context;
@@ -15,19 +16,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by setia on 12/5/2017.
- */
-
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsViewHolder> {
+public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.FriendsViewHolder> {
 
     private JSONArray friendsJSONArray;
     Bitmap[] bitmaps;
     Context parentContext;
     public static final String putExtraKey = "FriendsAdapterMessage";
-;
+    ;
 
-    FriendsAdapter(Context context, JSONArray friendsJSONArray, Bitmap[] bitmaps){
+    LeaderboardAdapter(Context context, JSONArray friendsJSONArray, Bitmap[] bitmaps){
         this.parentContext = context;
         this.friendsJSONArray = friendsJSONArray;
         this.bitmaps = bitmaps;
@@ -74,8 +71,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
             try {
                 JSONObject temp = friendsJSONArray.getJSONObject(position);
                 String name  = temp.getString("name");
-                String username = temp.getString("username");
-                userInformationTextView.setText(name + "\n" + username);
+                userInformationTextView.setText((position + 1) + ": " + name);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -91,7 +87,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
             int position = getAdapterPosition();
             try {
                 JSONObject stranger = friendsJSONArray.getJSONObject(position);
-//                Log.i("Angelia", stranger.toString());
+                Log.i("Angelia", stranger.toString());
                 int strangerID =  stranger.getInt("id");
 
                 Intent intent = new Intent(v.getContext(), StatsActivity.class);
