@@ -278,7 +278,7 @@ public class Player {
                 }
             } else {
                 response = null;
-                Log.i("connection","Connection not successful");
+                Log.i("friend connection","Connection not successful");
                 return;
             }
         } catch (IOException e) {

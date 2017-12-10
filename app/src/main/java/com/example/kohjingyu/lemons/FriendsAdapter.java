@@ -93,7 +93,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
             int position = getAdapterPosition();
             try {
                 JSONObject stranger = friendsJSONArray.getJSONObject(position);
-                Log.i("Angelia", stranger.toString());
+//                Log.i("Angelia", stranger.toString());
                 int strangerID =  stranger.getInt("id");
 
                 Intent intent = new Intent(v.getContext(), StatsActivity.class);

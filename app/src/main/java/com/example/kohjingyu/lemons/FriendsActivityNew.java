@@ -202,10 +202,10 @@ public class FriendsActivityNew extends AppCompatActivity {
                     while ((line = br.readLine()) != null) {
                         response += line;
                     }
-                    Log.i("Response", response);
+                    Log.i("searchf response", response);
                 } else {
                     response = null;
-                    Log.i("HTTP", "Connection not successful");
+                    Log.i("searchf HTTP", "Connection not successful");
                 }
             } catch (IOException e) {
                 e.printStackTrace();

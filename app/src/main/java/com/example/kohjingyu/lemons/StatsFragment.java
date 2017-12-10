@@ -139,14 +139,11 @@ public class StatsFragment extends Fragment {
             getInfo.execute(userId);
 
             try{
-                Player.getPlayer().updateFriends();
                 JSONArray friendList = Player.getPlayer().getFriends();
                 Log.i("add friend", "friend list: "+ friendList.toString());
 
                 boolean alreadyFriend = false;
-                if(friendList!=null){
-                    alreadyFriend = userExists(friendList, userId);
-                }
+                alreadyFriend = userExists(friendList, userId);
 
                 if(alreadyFriend){
                     addFriendButton.setVisibility(View.VISIBLE);
@@ -242,13 +239,15 @@ public class StatsFragment extends Fragment {
     }
 
 
+
     private class addFriend extends AsyncTask<Integer, Void, Boolean>{
 
         @Override
         protected Boolean doInBackground(Integer... integers) {
             //check if friend alr
             JSONArray friendsList = Player.getPlayer().getFriends();
-
+            Log.i("Angelia", "friends list: "+ friendsList.toString());
+            if(userExists(friendsList, userId)) return false;
 
             int requesterID = userId;
             int requesteeID = Player.getPlayer().getId();
@@ -365,4 +364,5 @@ public class StatsFragment extends Fragment {
             avatarImage.setImageBitmap(avatar);
         }
     }
+
 }
