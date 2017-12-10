@@ -100,6 +100,7 @@ public class AccountActivity extends AppCompatActivity
         @Override
         protected Bitmap doInBackground(String... params){
             URL avatarURL = generateAvatarURL(params[0]);
+            Player.getPlayer().updateFriends();
             Bitmap avatar = null;
 
             int i = 0;
