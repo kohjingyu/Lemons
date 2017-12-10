@@ -25,7 +25,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -407,6 +406,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             os.close();
             int responseCode=conn.getResponseCode();
 
+
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;
                 BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -415,6 +415,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
             else {
+                Log.i("RESPONSECODE", String.valueOf(responseCode));
                 response = null;
             }
         } catch (Exception e) {
