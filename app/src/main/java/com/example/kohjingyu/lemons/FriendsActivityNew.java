@@ -43,25 +43,7 @@ public class FriendsActivityNew extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         JSONArray friendsList = new JSONArray();
-//        JSONObject jsonObject1 = new JSONObject();
-//        JSONObject jsonObject2 = new JSONObject();
 
-//        try {
-//            jsonObject1.put("name", "Vincent");
-//            jsonObject1.put("username", "vincentcent");
-//            jsonObject2.put("name", "Vincent Setiawan");
-//            jsonObject2.put("username", "vincentcentcent");
-//            friendsList.put(jsonObject1);
-//            friendsList.put(jsonObject2);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
-//        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
-//        bitmaps[0] = bitmap1;
-//        bitmaps[1] = bitmap2;
-//        Player.getPlayer().updateFriends();
         friendsJSONArray = Player.getPlayer().getFriends();
         Log.i("friends", friendsList.toString());
         bitmaps = generateNakedAvatars(friendsList.length());
@@ -212,7 +194,7 @@ public class FriendsActivityNew extends AppCompatActivity {
                     while ((line = br.readLine()) != null) {
                         response += line;
                     }
-                    Log.i("Response", response);
+//                    Log.i("Response", response);
                 } else {
                     response = null;
                     Log.i("HTTP", "Connection not successful");

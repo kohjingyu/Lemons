@@ -37,12 +37,12 @@ public class LeaderboardActivity extends AppCompatActivity {
         LeaderboardActivity.GetLeaderboardTask getFriendsTask = new LeaderboardActivity.GetLeaderboardTask();
         getFriendsTask.execute();
 
-        friendsAdapter = new FriendsAdapter(this, jsonArray,bitmaps);
+        friendsAdapter = new LeaderboardAdapter(this, jsonArray,bitmaps);
         recyclerView.setAdapter(friendsAdapter);
     }
 
     private RecyclerView recyclerView;
-    private FriendsAdapter friendsAdapter;
+    private LeaderboardAdapter friendsAdapter;
     private Bitmap[] bitmaps;
     public final String BASE_URL = "http://devostrum.no-ip.info:12345";
     public final String MAPLE_URL_HEAD = "https://labs.maplestory.io/api/gms/latest/character/center/2000/20001,30037";

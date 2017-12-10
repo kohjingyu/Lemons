@@ -77,7 +77,6 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
             Timestamp timestamp = activity.getTimestamp();
 
             // TODO: Format timestamp
-
             userInformationTextView.setText(activityName + " (" + timestamp + ")" + "\n" + activityScore + " " + activityRemarks);
         }
 
