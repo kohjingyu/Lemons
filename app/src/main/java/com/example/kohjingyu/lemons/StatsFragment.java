@@ -20,18 +20,17 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import static com.example.kohjingyu.lemons.LoginActivity.performPostCall;
 import static com.example.kohjingyu.lemons.Player.ACADEMICS;
 import static com.example.kohjingyu.lemons.Player.DIET;
 import static com.example.kohjingyu.lemons.Player.FITNESS;
 import static com.example.kohjingyu.lemons.Player.MENTAL;
-import static com.example.kohjingyu.lemons.Player.getPlayer;
 
 
 public class StatsFragment extends Fragment {
@@ -61,6 +60,7 @@ public class StatsFragment extends Fragment {
     Player player;
 
     JSONArray friendsJSONArray;
+    private static StatsActivity parent;
 
 
     public static final String key = "StatsFragmentMessage";
@@ -126,7 +126,7 @@ public class StatsFragment extends Fragment {
 
         // Check if they are already friends
         friendsJSONArray = Player.getPlayer().getFriends();
-        System.out.println("Friends: " + friendsJSONArray);
+        System.out.println("Angelia Friends: " + friendsJSONArray);
 
         for(int i = 0; i < friendsJSONArray.length(); i ++) {
             try {
@@ -135,8 +135,9 @@ public class StatsFragment extends Fragment {
 
                 // Check if they are already friends
                 if(id == userId) {
-                    addFriendButton.setVisibility(View.INVISIBLE);
+                    addFriendButton.setVisibility(View.VISIBLE);
                     addFriendButton.setEnabled(false);
+                    addFriendButton.setText("Already friends");
                     break;
                 }
             } catch (JSONException e) {
@@ -157,25 +158,8 @@ public class StatsFragment extends Fragment {
             System.out.println("getting info");
             GetPlayerInfo getInfo = new GetPlayerInfo();
             getInfo.execute(userId);
-
-            try{
-                JSONArray friendList = Player.getPlayer().getFriends();
-                Log.i("add friend", "friend list: "+ friendList.toString());
-
-                boolean alreadyFriend = false;
-                alreadyFriend = userExists(friendList, userId);
-
-                if(alreadyFriend){
-                    addFriendButton.setVisibility(View.VISIBLE);
-                    addFriendButton.setEnabled(false);
-                    addFriendButton.setText("Already friend");
-                }else{
-                    addFriendButton.setVisibility(View.VISIBLE);
-                    addFriendButton.setEnabled(true);
-                }
-            }catch (Exception ex){
-                ex.printStackTrace();
-            }
+            addFriendButton.setVisibility(View.VISIBLE);
+            addFriendButton.setEnabled(true);
 
         }
         return view;
@@ -208,7 +192,7 @@ public class StatsFragment extends Fragment {
             }
         }
 
-        String levelString = String.format("Level %s", (1+Player.getPlayer().getLevel()));
+        String levelString = String.format("Level %s", (Player.getPlayer().getLevel()));
         userLevel.setText(levelString);
 
     }
@@ -264,17 +248,10 @@ public class StatsFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(Integer... integers) {
-            //check if friend alr
-            JSONArray friendsList = Player.getPlayer().getFriends();
-            Log.i("Angelia", "friends list: "+ friendsList.toString());
-            if(userExists(friendsList, userId)) return false;
-
             int requesterID = userId;
             int requesteeID = Player.getPlayer().getId();
 
             try {
-                Log.i("add friend", "requester: " + requesterID);
-                Log.i("add friend", "requestee: " + requesteeID);
                 JSONObject postParams = new JSONObject();
                 postParams.put("requester", requesterID);
                 postParams.put("requestee", requesteeID);
@@ -282,9 +259,10 @@ public class StatsFragment extends Fragment {
                     String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
                     JSONObject jsonObj = new JSONObject(response);
                     boolean success = (boolean)jsonObj.get("success");
+                    Log.i("add friend?", "response: "+ response);
+                    Log.i("add friend?", "success: "+ success);
 
                     if(success) {
-//                        Log.i("add friend", "player accepted stranger's friend request (requester = stranger, requestee = player)");
                         return true;
                     }
                     else {
@@ -295,31 +273,6 @@ public class StatsFragment extends Fragment {
                     ex.printStackTrace();
                 }
 
-                requesterID = Player.getPlayer().getId();
-                requesteeID = userId;
-
-                postParams = new JSONObject();
-                postParams.put("requester", requesterID);
-                postParams.put("requestee", requesteeID);
-
-                try{
-                    String response = performPostCall("http://devostrum.no-ip.info:12345/friend", postParams);
-                    JSONObject jsonObj = new JSONObject(response);
-                    boolean success = (boolean)jsonObj.get("success");
-
-                    if(success) {
-//                        Log.i("add friend", "stranger accepted player's friend request (requester = player, requestee = player)");
-                        return true;
-                    }
-                    else {
-                        String errorMessage = (String)jsonObj.get("message");
-                        System.out.println(errorMessage);
-                    }
-                }catch (Exception ex){
-                    ex.printStackTrace();
-                }
-
-                Player.getPlayer().updateFriends();
             }
             catch (JSONException ex) {
                 ex.printStackTrace();
@@ -331,8 +284,28 @@ public class StatsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean success){
-            Log.i("Angelia","here");
-            Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
+            if(success){
+                Toast.makeText(getActivity(), "Added friend!", Toast.LENGTH_SHORT).show();
+            }
+            new UpdateFriendList().execute();
+        }
+    }
+
+    private class UpdateFriendList extends AsyncTask<Integer, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            try{
+                Player.getPlayer().updateFriends();
+                return true;
+            }catch (Exception ex){
+                ex.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            Log.i("update friends", success.toString());
         }
     }
 

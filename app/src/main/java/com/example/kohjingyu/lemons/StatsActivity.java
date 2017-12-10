@@ -1,10 +1,12 @@
 package com.example.kohjingyu.lemons;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class StatsActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,8 @@ public class StatsActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.statsFragmentContainer, statsFragment, "statsFragment")
                 .commit();
+
+        Handler messageHandler = new Handler();
     }
 
 

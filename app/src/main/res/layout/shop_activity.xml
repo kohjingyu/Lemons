@@ -11,15 +11,17 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
+
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:onClick="onClickSaveEquipments"
-            android:text="Save"/>
+            android:padding="@dimen/fab_margin_small"
+            android:src="@drawable/savebutton"
+            android:background="@android:color/transparent"
+            android:onClick="onClickSaveEquipments"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
