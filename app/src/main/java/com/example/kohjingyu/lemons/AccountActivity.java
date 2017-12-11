@@ -32,7 +32,6 @@ import java.net.URL;
 
 public class AccountActivity extends AppCompatActivity{
     TextView userNameText;
-    public static final String BASE_URL = "http://devostrum.no-ip.info:12345";
     ImageView avatarImage;
 
     @Override
@@ -89,20 +88,8 @@ public class AccountActivity extends AppCompatActivity{
 
         @Override
         protected Bitmap doInBackground(String... params){
-            URL avatarURL = generateAvatarURL(params[0]);
+            Bitmap avatar = Player.getPlayer().getAvatar();
             Player.getPlayer().updateFriends();
-            Bitmap avatar = null;
-
-            int i = 0;
-            try {
-                if(avatarURL != null) {
-                    Log.i("URL",avatarURL.toString());
-                    InputStream in = avatarURL.openStream();
-                    avatar = BitmapFactory.decodeStream(in);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             return avatar;
         }
 
@@ -113,56 +100,6 @@ public class AccountActivity extends AppCompatActivity{
             }
         }
     }
-
-    public static URL generateAvatarURL(String userId){
-        String response = "";
-        response = "";
-        URL avatarURL = null;
-
-        Log.i("userId", userId);
-        try {
-            URL url = new URL(BASE_URL + "/avatar?userId=" + userId);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setDoInput(true);
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = br.readLine()) != null) {
-                    response += line;
-                }
-            } else {
-                response = null;
-                Log.i("HTTP", "Connection not successful");
-                return null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            JSONObject JSONresponse = new JSONObject(response);
-            Log.i("response", response);
-            boolean success = JSONresponse.getBoolean("success");
-
-            if (success){
-                JSONObject equipments = JSONresponse.getJSONObject("user");
-                Player.getPlayer().updateEquipment(equipments);
-                avatarURL = Player.getPlayer().mapleURLGenerator(equipments);
-            } else {
-                String message = JSONresponse.getString("message");
-                Log.i("Account", message);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return avatarURL;
-    }
-
 
     public void logout(View view) {
         Log.i("Lemons", "Logging out...");

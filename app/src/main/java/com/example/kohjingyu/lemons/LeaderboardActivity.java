@@ -37,16 +37,14 @@ public class LeaderboardActivity extends AppCompatActivity {
         LeaderboardActivity.GetLeaderboardTask getFriendsTask = new LeaderboardActivity.GetLeaderboardTask();
         getFriendsTask.execute();
 
-        friendsAdapter = new LeaderboardAdapter(this, jsonArray,bitmaps);
+        // Just set empty array, fill it later
+        friendsAdapter = new LeaderboardAdapter(this, jsonArray, new Bitmap[1]);
         recyclerView.setAdapter(friendsAdapter);
     }
 
     private RecyclerView recyclerView;
     private LeaderboardAdapter friendsAdapter;
-    private Bitmap[] bitmaps;
     public final String BASE_URL = "http://devostrum.no-ip.info:12345";
-    public final String MAPLE_URL_HEAD = "https://labs.maplestory.io/api/gms/latest/character/center/2000/20001,30037";
-    public final String MAPLE_URL_TAIL = "/stand1?showears=false&resize=1";
     private JSONArray leaderboardJSONArray;
 
     private Bitmap[] generateNakedAvatars(int numberOfAvatars){
@@ -57,86 +55,26 @@ public class LeaderboardActivity extends AppCompatActivity {
         return bitmaps;
     }
 
-    private URL[] generateLeaderboardAvatarsURL(JSONArray leaderboardList){
-        URL[] urls = new URL[leaderboardList.length()];
-        String response = "";
-        try {
-            for (int i = 0; i < leaderboardList.length(); i++) {
-                response = "";
-                JSONObject temp = leaderboardList.getJSONObject(i); //each friend jsonobject containing userid
-                String userId = String.valueOf(temp.getInt("id"));
-                Log.i("userId", userId);
-                try {
-                    URL url = new URL(BASE_URL + "/avatar?userId=" + userId);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setReadTimeout(15000);
-                    conn.setConnectTimeout(15000);
-                    conn.setDoInput(true);
-                    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-                    int responseCode = conn.getResponseCode();
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        String line;
-                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        while ((line = br.readLine()) != null) {
-                            response += line;
-                        }
-                    } else {
-                        response = null;
-                        Log.i("HTTP", "Connection not successful");
-                        urls[i] = null;
-                        continue;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    JSONObject JSONresponse = new JSONObject(response);
-                    Log.i("response", response);
-                    boolean success = JSONresponse.getBoolean("success");
-
-                    if (success){
-                        JSONObject equipments = JSONresponse.getJSONObject("user");
-                        urls[i] = Player.getPlayer().mapleURLGenerator(equipments);
-                    } else {
-                        String message = JSONresponse.getString("message");
-                        Log.i("Friend", message);
-                        urls[i] = null;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
-        return urls;
-
-
-    }
-
     public class GetAvatarTask extends AsyncTask<JSONArray, Void, Bitmap[]> {
 
         @Override
         protected Bitmap[] doInBackground(JSONArray... jsonArrays){
-            URL[] avatarURLs = generateLeaderboardAvatarsURL(jsonArrays[0]);
+            JSONArray leaderboardList = jsonArrays[0];
 
-            Bitmap[] avatars = new Bitmap[avatarURLs.length]; //Create new array of bitmap with length depending on the url
+            Bitmap[] avatars = new Bitmap[leaderboardList.length()]; //Create new array of bitmap with length depending on the url
             int i = 0;
-            URL tempurl;
-            while (i < avatarURLs.length) {
-                tempurl = avatarURLs[i];
+            while (i < avatars.length) {
+                JSONObject temp = null; //each friend jsonobject containing userid
                 try {
-                    if(tempurl != null) {
-                        Log.i("URL",tempurl.toString());
-                        InputStream in = tempurl.openStream();
-                        avatars[i] = BitmapFactory.decodeStream(in);
-                    }
-                } catch (IOException e) {
+                    temp = leaderboardList.getJSONObject(i);
+                    String userId = String.valueOf(temp.getInt("id"));
+                    avatars[i] = Player.getAvatarForUser(userId);
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
                 i++;
-                Log.i("I",String.valueOf(i) + " out of " + avatarURLs.length);
+                Log.i("I",String.valueOf(i) + " out of " + leaderboardList.length());
             }
             return avatars;
         }
@@ -202,6 +140,4 @@ public class LeaderboardActivity extends AppCompatActivity {
             getAvatarTask.execute(friendList);
         }
     }
-
-
 }

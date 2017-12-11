@@ -185,11 +185,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = usernameView;
             cancel = true;
         }
-//        else if (!isEmailValid(email)) {
-//            mEmailView.setError(getString(R.string.error_invalid_email));
-//            focusView = mEmailView;
-//            cancel = true;
-//        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -202,10 +197,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
         }
-    }
-
-    private boolean isUsernameValid(String username) {
-        return true; //username.length() >= 4;
     }
 
     private boolean isPasswordValid(String password) {
@@ -350,13 +341,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
             catch (JSONException ex) {
                 ex.printStackTrace();
-            }
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
             }
 
             return false;

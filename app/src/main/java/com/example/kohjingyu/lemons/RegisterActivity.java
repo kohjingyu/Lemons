@@ -1,20 +1,18 @@
 package com.example.kohjingyu.lemons;
 
 import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -69,9 +67,6 @@ public class RegisterActivity extends AppCompatActivity {
         // Register user on server side
         registerTask = new UserRegisterTask(email, password, username, displayName);
         registerTask.execute((Void) null);
-
-        //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        //RegisterActivity.this.startActivity(intent);
     }
 
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
@@ -133,10 +128,5 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
         }
-    }
-
-    public void changeImage(View view) {
-        // TODO: Implement changing of display image on register for users
-        Log.i("Lemons", "Changing image");
     }
 }
