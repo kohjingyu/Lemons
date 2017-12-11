@@ -2,6 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:backgroundTint="@color/colorPrimary"
+
     tools:context="com.example.kohjingyu.lemons.LevelUpAlertDialogFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -9,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/levelupbadge"
+        android:padding="@dimen/fab_margin_small"
         android:layout_gravity="center"
         android:background="@android:color/transparent"/>
 

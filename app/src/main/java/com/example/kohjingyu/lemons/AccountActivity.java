@@ -30,8 +30,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class AccountActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class AccountActivity extends AppCompatActivity {
     TextView userNameText;
     public static final String BASE_URL = "http://devostrum.no-ip.info:12345";
     ImageView avatarImage;
@@ -50,7 +49,6 @@ public class AccountActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         String name = Player.getPlayer().getName();
 
@@ -180,24 +178,6 @@ public class AccountActivity extends AppCompatActivity
         return avatarURL;
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     public void logout(View view) {
         Log.i("Lemons", "Logging out...");
