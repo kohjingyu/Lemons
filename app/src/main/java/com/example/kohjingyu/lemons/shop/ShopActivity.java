@@ -163,6 +163,7 @@ public class ShopActivity extends AppCompatActivity implements ShopCloneFragment
         @Override
         protected void onPostExecute(Boolean success){
             if (success){
+                Toast.makeText(getBaseContext(), "Outfit saved! Yay!", Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 Toast.makeText(getBaseContext(), "Equipment not saved, please try again later", Toast.LENGTH_SHORT).show();

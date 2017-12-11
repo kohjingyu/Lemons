@@ -71,7 +71,7 @@ public class FriendsActivityNew extends AppCompatActivity {
                 response = "";
                 JSONObject temp = friendLists.getJSONObject(i); //each friend jsonobject containing userid
                 String userId = String.valueOf(temp.getInt("id"));
-                Log.i("id", userId);
+//                Log.i("id", userId);
                 try {
                     URL url = new URL(BASE_URL + "/avatar?userId=" + userId);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();

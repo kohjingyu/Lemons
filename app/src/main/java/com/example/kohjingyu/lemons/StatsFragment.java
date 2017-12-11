@@ -1,5 +1,7 @@
 package com.example.kohjingyu.lemons;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,17 +22,12 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.example.kohjingyu.lemons.LoginActivity.performPostCall;
-import static com.example.kohjingyu.lemons.Player.ACADEMICS;
-import static com.example.kohjingyu.lemons.Player.DIET;
-import static com.example.kohjingyu.lemons.Player.FITNESS;
-import static com.example.kohjingyu.lemons.Player.MENTAL;
 
 
 public class StatsFragment extends Fragment {
@@ -60,10 +57,12 @@ public class StatsFragment extends Fragment {
     Player player;
 
     JSONArray friendsJSONArray;
-    private static StatsActivity parent;
+    private static final String LEVEL = "Level";
+    private static final String ACADEMICS = "Academics";
+    private static final String FITNESS = "Fitness";
+    private static final String DIET = "Diet";
+    private static final String MENTAL = "Mental Wellness";
 
-
-    public static final String key = "StatsFragmentMessage";
 
     public static StatsFragment newInstance(int userId) {
         StatsFragment statsFragment = new StatsFragment();
@@ -126,7 +125,6 @@ public class StatsFragment extends Fragment {
 
         // Check if they are already friends
         friendsJSONArray = Player.getPlayer().getFriends();
-        System.out.println("Angelia Friends: " + friendsJSONArray);
 
         for(int i = 0; i < friendsJSONArray.length(); i ++) {
             try {
@@ -166,48 +164,55 @@ public class StatsFragment extends Fragment {
     }
 
     public void updateStats() {
-        Player.Scores scores = player.getScores();
-        System.out.println(scores);
-
         usernameText.setText(player.getName());
 
+        Player.Scores scores = player.getScores();
         int academicScoreRaw = scores.getAcademics();
         int fitnessScoreRaw = scores.getFitness();
         int dietScoreRaw = scores.getDiet();
         int mentalScoreRaw = scores.getMentalWellness();
 
         boolean bool = (userId == Player.getPlayer().getId());
-        statsManager(bool, ACADEMICS, academicScoreRaw, player.getAcademicMilestone(), academicProgress, academicProgressText, academicLevel);
-        statsManager(bool, FITNESS, fitnessScoreRaw, player.getFitnessMilestone(), fitnessProgress, fitnessProgressText, fitnessLevel);
-        statsManager(bool, DIET, dietScoreRaw, player.getDietMilestone(), dietProgress, dietProgressText, dietLevel);
-        statsManager(bool, MENTAL, mentalScoreRaw, player.getMentalMilestone(), mentalProgress, mentalProgressText, mentalLevel);
+        int academicMilestone = statsManager(bool, ACADEMICS, academicScoreRaw, academicProgress, academicProgressText, academicLevel);
+        int fitnessMilestone = statsManager(bool, FITNESS, fitnessScoreRaw, fitnessProgress, fitnessProgressText, fitnessLevel);
+        int dietMilestone = statsManager(bool, DIET, dietScoreRaw, dietProgress, dietProgressText, dietLevel);
+        int mentalMilestone = statsManager(bool, MENTAL, mentalScoreRaw, mentalProgress, mentalProgressText, mentalLevel);
 
-        int tempLevel = (player.getAcademicMilestone() + player.getFitnessMilestone() + player.getMentalMilestone() + player.getDietMilestone())/4;
+        int tempLevel = (academicMilestone + fitnessMilestone + dietMilestone + mentalMilestone)/4;
+
         if(bool){
-            if(tempLevel>player.getLevel()){
+            SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            int previousLevel = pref.getInt(LEVEL, 1);
+            if(tempLevel>previousLevel){
                 LevelUpAlertDialogFragment alertDialogFragment = new LevelUpAlertDialogFragment();
                 android.support.v4.app.FragmentManager fm = getFragmentManager();
                 alertDialogFragment.show(fm, "level up alert dialog");
-                player.setLevel(tempLevel);
+                SharedPreferences.Editor edt = pref.edit();
+                edt.putInt(LEVEL, tempLevel).commit();
             }
         }
 
-        String levelString = String.format("Level %s", (Player.getPlayer().getLevel()));
+        String levelString = String.format("Level %s", tempLevel+1); //add one for displayed level because starting level is 1
         userLevel.setText(levelString);
 
     }
 
-    public void statsManager(boolean bool, String category, int rawScore, int previousMilestone, ProgressBar progressBar, TextView textView, TextView categoryLevel){
-        //TODO after i visit another stats profile the dialog and toasts appear
+    public int statsManager(boolean bool, String category, int rawScore, ProgressBar progressBar, TextView textView, TextView categoryLevel){
         int max = 100;
         int adjustedScore = rawScore%max;
         int milestone = rawScore/max;
         progressBar.setMax(max);
         progressBar.setProgress(adjustedScore);
+
         String progress = adjustedScore + "/" + max;
         textView.setText(progress);
+
         String categoryLevelMessage = String.format("%s (Level %s): ", category, milestone+1);
         categoryLevel.setText(categoryLevelMessage);
+
+        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor edt = pref.edit();
+        int previousMilestone = pref.getInt(category, 1);
 
         if(bool){
             if(milestone>previousMilestone){
@@ -217,13 +222,15 @@ public class StatsFragment extends Fragment {
                         .setCancelable(true)
                         .create()
                         .show();
-                if (category.equals(ACADEMICS)) player.setAcademicMilestone(milestone);
-                if (category.equals(FITNESS)) player.setFitnessMilestone(milestone);
-                if (category.equals(DIET)) player.setDietMilestone(milestone);
-                if (category.equals(MENTAL)) player.setMentalMilestone(milestone);
+                if (category.equals(ACADEMICS)) edt.putInt(ACADEMICS, milestone).commit();
+                if (category.equals(FITNESS)) edt.putInt(FITNESS, milestone).commit();
+                if (category.equals(DIET)) edt.putInt(DIET, milestone).commit();
+                if (category.equals(MENTAL)) edt.putInt(MENTAL, milestone).commit();
 
             }
         }
+
+        return milestone;
 
     }
 

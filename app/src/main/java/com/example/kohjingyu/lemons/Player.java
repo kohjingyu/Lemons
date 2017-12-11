@@ -26,15 +26,7 @@ public class Player {
     public final String MAPLE_URL_TAIL = "/stand1?showears=false&resize=1";
 
     //for stats activity
-    public static int level;
-    public static int academicMilestone;
-    public static int fitnessMilestone;
-    public static int dietMilestone;
-    public static int mentalMilestone;
-    public static final String ACADEMICS = "Academics";
-    public static final String FITNESS = "Fitness";
-    public static final String DIET = "Diet";
-    public static final String MENTAL = "Mental Wellness";
+
 
     private int id;
     private String name;
@@ -162,11 +154,6 @@ public class Player {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        level = 1;
-        academicMilestone = 1;
-        dietMilestone = 1;
-        fitnessMilestone =1;
-        mentalMilestone =1;
     }
 
     public Player(int id, String name, String email,
@@ -442,46 +429,5 @@ public class Player {
         }
 
         return null;
-    }
-
-
-    public  int getLevel() {
-        return level;
-    }
-
-    public  void setLevel(int level) {
-        Player.level = level;
-    }
-
-    public  int getAcademicMilestone() {
-        return academicMilestone;
-    }
-
-    public  void setAcademicMilestone(int academicMilestone) {
-        Player.academicMilestone = academicMilestone;
-    }
-
-    public  int getFitnessMilestone() {
-        return fitnessMilestone;
-    }
-
-    public  void setFitnessMilestone(int fitnessMilestone) {
-        Player.fitnessMilestone = fitnessMilestone;
-    }
-
-    public  int getDietMilestone() {
-        return dietMilestone;
-    }
-
-    public  void setDietMilestone(int dietMilestone) {
-        Player.dietMilestone = dietMilestone;
-    }
-
-    public  int getMentalMilestone() {
-        return mentalMilestone;
-    }
-
-    public  void setMentalMilestone(int mentalMilestone) {
-        Player.mentalMilestone = mentalMilestone;
     }
 }
