@@ -134,7 +134,7 @@ public class StatsFragment extends Fragment {
                 if(id == userId) {
                     addFriendButton.setVisibility(View.VISIBLE);
                     addFriendButton.setEnabled(false);
-                    addFriendButton.setText("Already friends");
+                    addFriendButton.setText("Already Friends");
                     break;
                 }
             } catch (JSONException e) {
@@ -197,6 +197,7 @@ public class StatsFragment extends Fragment {
     }
 
     public int statsManager(boolean bool, String category, int rawScore, ProgressBar progressBar, TextView textView, TextView categoryLevel){
+        // Computes scores and achievements a given player's individual scores
         int maxScore = 100;
         int adjustedScore = rawScore%maxScore;
         int milestone = rawScore/maxScore;

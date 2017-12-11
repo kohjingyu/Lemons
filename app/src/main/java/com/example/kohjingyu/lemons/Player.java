@@ -28,9 +28,6 @@ public class Player {
     public final String MAPLE_URL_HEAD = "https://labs.maplestory.io/api/gms/latest/character/center/2000/20001,30037";
     public final String MAPLE_URL_TAIL = "/stand1?showears=false&resize=1";
 
-    //for stats activity
-
-
     private int id;
     private String name;
     private String username;
@@ -117,24 +114,7 @@ public class Player {
         return url;
 
     }
-
-    private String generateGetScoreRequestURL(JSONObject getParams){
-        String requestURL = "http://devostrum.no-ip.info:12345/score?";
-        Iterator<String> jsonIterator = getParams.keys();
-        try {
-            while (jsonIterator.hasNext()) {
-                String key = jsonIterator.next();
-                requestURL += key + "=" + getParams.get(key);
-                if (jsonIterator.hasNext()) {
-                    requestURL += "&";
-                }
-            }
-        } catch (JSONException ex){
-            ex.printStackTrace();
-        }
-        return requestURL;
-    }
-
+    
     private void setScores(JSONObject jsonObjectScores){
         this.scores = new Scores(jsonObjectScores);
     }
