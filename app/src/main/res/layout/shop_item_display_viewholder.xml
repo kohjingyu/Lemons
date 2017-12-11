@@ -14,4 +14,18 @@
             android:layout_height="match_parent"
             android:src="@drawable/shopitem1"
             android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/shop_item_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="LEVEL "
+            android:gravity="center"
+            android:background="#DF2F4F4F"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"/>
 </FrameLayout>
+
+<!--
+#992F4F4F is 70-80 % opacity dark grey. (adjust opacity by changing the first two hex values)
+#FFFFFF is just pure white
+-->

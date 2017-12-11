@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kohjingyu.lemons.Player;
 import com.example.kohjingyu.lemons.R;
@@ -38,8 +40,8 @@ public class ShopCloneFragment extends Fragment {
     private static final String ARG_ITEM_TYPE = "itemType";
     public String mItemType;
     private JSONArray equipments;
-    private int[] itemId = {1000003, 1001112, 1002257, 1003686, 1004169, 1004754};
     private OnFragmentInteractionListener mListener;
+    private int level;
 
     public ShopCloneFragment() {
         // Required empty public constructor
@@ -70,6 +72,9 @@ public class ShopCloneFragment extends Fragment {
         if (getArguments() != null) {
             mItemType = getArguments().getString(ARG_ITEM_TYPE);
         }
+
+        level = ((ShopActivity)getParentFragment().getActivity()).getLevel();
+        Log.i("level", String.valueOf(level));
     }
 
     @Override
@@ -84,6 +89,11 @@ public class ShopCloneFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 Player player = Player.getPlayer();
+                int positionTemp = position + 1;
+                if (positionTemp > level) {
+                    Toast.makeText(getContext(),"Level " + positionTemp + " required", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 try {
                     player.addEquipment(mItemType, equipments.getJSONObject(position).getInt("id"));
                 } catch (JSONException e) {
@@ -165,6 +175,13 @@ public class ShopCloneFragment extends Fragment {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View view = inflater.inflate(R.layout.shop_item_display_viewholder,parent,false);
             ImageView imageView = view.findViewById(R.id.shop_item);
+            int positionTemp = position + 1;
+            if (positionTemp > level) {
+                TextView textView = view.findViewById(R.id.shop_item_textview);
+                textView.setVisibility(View.VISIBLE);
+                String text = "LEVEL " + positionTemp;
+                textView.setText(text);
+            }
             String filename = "avatar";
             String packageName = getContext().getPackageName();
             String typeOfResource = "drawable";

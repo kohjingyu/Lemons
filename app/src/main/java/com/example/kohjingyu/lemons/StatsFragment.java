@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,10 +17,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -178,20 +173,23 @@ public class StatsFragment extends Fragment {
         int mentalMilestone = statsManager(bool, MENTAL, mentalScoreRaw, mentalProgress, mentalProgressText, mentalLevel);
 
         int tempLevel = (academicMilestone + fitnessMilestone + dietMilestone + mentalMilestone)/4;
+        tempLevel++;
 
         if(bool){
-            SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+            SharedPreferences pref = getActivity().getSharedPreferences("Milestone",Context.MODE_PRIVATE);
             int previousLevel = pref.getInt(LEVEL, 1);
+            Log.i("LEVELSTATS", String.valueOf(previousLevel));
             if(tempLevel>previousLevel){
                 LevelUpAlertDialogFragment alertDialogFragment = new LevelUpAlertDialogFragment();
                 android.support.v4.app.FragmentManager fm = getFragmentManager();
                 alertDialogFragment.show(fm, "level up alert dialog");
                 SharedPreferences.Editor edt = pref.edit();
-                edt.putInt(LEVEL, tempLevel).commit();
+                edt.putInt(LEVEL, tempLevel).apply();
             }
         }
 
-        String levelString = String.format("Level %s", tempLevel+1); //add one for displayed level because starting level is 1
+        String levelString = String.format("Level %s", tempLevel); //add one for displayed level because starting level is 1
         userLevel.setText(levelString);
 
     }
@@ -210,7 +208,7 @@ public class StatsFragment extends Fragment {
         String categoryLevelMessage = String.format("%s (Level %s): ", category, milestone+1);
         categoryLevel.setText(categoryLevelMessage);
 
-        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences pref = getActivity().getSharedPreferences("Milestone",Context.MODE_PRIVATE);
         SharedPreferences.Editor edt = pref.edit();
         int previousMilestone = pref.getInt(category, 1);
 
@@ -222,10 +220,10 @@ public class StatsFragment extends Fragment {
                         .setCancelable(true)
                         .create()
                         .show();
-                if (category.equals(ACADEMICS)) edt.putInt(ACADEMICS, milestone).commit();
-                if (category.equals(FITNESS)) edt.putInt(FITNESS, milestone).commit();
-                if (category.equals(DIET)) edt.putInt(DIET, milestone).commit();
-                if (category.equals(MENTAL)) edt.putInt(MENTAL, milestone).commit();
+                if (category.equals(ACADEMICS)) edt.putInt(ACADEMICS, milestone).apply();
+                if (category.equals(FITNESS)) edt.putInt(FITNESS, milestone).apply();
+                if (category.equals(DIET)) edt.putInt(DIET, milestone).apply();
+                if (category.equals(MENTAL)) edt.putInt(MENTAL, milestone).apply();
 
             }
         }

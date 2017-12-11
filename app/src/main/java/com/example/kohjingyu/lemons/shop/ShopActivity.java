@@ -1,5 +1,6 @@
 package com.example.kohjingyu.lemons.shop;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -32,6 +33,8 @@ public class ShopActivity extends AppCompatActivity implements ShopCloneFragment
     HashMap<String, Integer> equipped;
     ImageView avatarImageView;
     JSONObject equipments;
+    private static final String LEVEL = "Level";
+    private int level = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,12 @@ public class ShopActivity extends AppCompatActivity implements ShopCloneFragment
         fragmentTransaction.commit();
         equipped = new HashMap<>();
         loadAvatar();
+        SharedPreferences sharedPreferences = getSharedPreferences("Milestone", MODE_PRIVATE);
+        level = sharedPreferences.getInt(LEVEL,1);
+    }
+
+    public int getLevel(){
+        return this.level;
     }
 
     public JSONArray getEquipments(String type){
