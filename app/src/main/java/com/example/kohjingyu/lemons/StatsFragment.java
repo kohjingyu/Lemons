@@ -63,7 +63,6 @@ public class StatsFragment extends Fragment {
     private static final String DIET = "Diet";
     private static final String MENTAL = "Mental Wellness";
 
-
     public static StatsFragment newInstance(int userId) {
         StatsFragment statsFragment = new StatsFragment();
         Bundle bundle = new Bundle();
@@ -198,13 +197,13 @@ public class StatsFragment extends Fragment {
     }
 
     public int statsManager(boolean bool, String category, int rawScore, ProgressBar progressBar, TextView textView, TextView categoryLevel){
-        int max = 100;
-        int adjustedScore = rawScore%max;
-        int milestone = rawScore/max;
-        progressBar.setMax(max);
+        int maxScore = 100;
+        int adjustedScore = rawScore%maxScore;
+        int milestone = rawScore/maxScore;
+        progressBar.setMax(maxScore);
         progressBar.setProgress(adjustedScore);
 
-        String progress = adjustedScore + "/" + max;
+        String progress = adjustedScore + "/" + maxScore;
         textView.setText(progress);
 
         String categoryLevelMessage = String.format("%s (Level %s): ", category, milestone+1);
@@ -248,8 +247,6 @@ public class StatsFragment extends Fragment {
             }
         }
     }
-
-
 
     private class addFriend extends AsyncTask<Integer, Void, Boolean>{
 
@@ -344,19 +341,8 @@ public class StatsFragment extends Fragment {
 
         @Override
         protected Bitmap doInBackground(String... params){
-            URL avatarURL = AccountActivity.generateAvatarURL(params[0]);
-            Bitmap avatar = null;
-
-            try {
-                if(avatarURL != null) {
-                    Log.i("URL",avatarURL.toString());
-                    InputStream in = avatarURL.openStream();
-                    avatar = BitmapFactory.decodeStream(in);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return avatar;
+            // params[0] is the id for avatar
+            return Player.getAvatarForUser(params[0]);
         }
 
         @Override

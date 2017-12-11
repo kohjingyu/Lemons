@@ -1,5 +1,7 @@
 package com.example.kohjingyu.lemons;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -8,6 +10,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -429,5 +432,86 @@ public class Player {
         }
 
         return null;
+    }
+
+    public Bitmap getAvatar() {
+        URL avatarURL = generateAvatarURL(String.valueOf(id));
+        Bitmap avatar = null;
+
+        try {
+            if(avatarURL != null) {
+                Log.i("URL",avatarURL.toString());
+                InputStream in = avatarURL.openStream();
+                avatar = BitmapFactory.decodeStream(in);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return avatar;
+    }
+
+    public static Bitmap getAvatarForUser(String userId) {
+        URL avatarURL = Player.generateAvatarURL(userId);
+        Bitmap avatar = null;
+
+        try {
+            if(avatarURL != null) {
+                Log.i("URL",avatarURL.toString());
+                InputStream in = avatarURL.openStream();
+                avatar = BitmapFactory.decodeStream(in);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return avatar;
+    }
+
+    public static URL generateAvatarURL(String userId){
+        String response = "";
+        response = "";
+        URL avatarURL = null;
+
+        Log.i("userId", userId);
+        try {
+            URL url = new URL(BASE_URL + "/avatar?userId=" + userId);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                String line;
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = br.readLine()) != null) {
+                    response += line;
+                }
+            } else {
+                response = null;
+                Log.i("HTTP", "Connection not successful");
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JSONObject JSONresponse = new JSONObject(response);
+            Log.i("response", response);
+            boolean success = JSONresponse.getBoolean("success");
+
+            if (success){
+                JSONObject equipments = JSONresponse.getJSONObject("user");
+                Player.getPlayer().updateEquipment(equipments);
+                avatarURL = Player.getPlayer().mapleURLGenerator(equipments);
+            } else {
+                String message = JSONresponse.getString("message");
+                Log.i("Account", message);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return avatarURL;
     }
 }
