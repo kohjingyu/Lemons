@@ -340,9 +340,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return true;
                 }
                 else {
-                    String errorMessage = (String)jsonObj.get("message");
-                    Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    System.out.println(errorMessage);
+                    final String errorMessage = (String)jsonObj.get("message");
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
             catch (JSONException ex) {
