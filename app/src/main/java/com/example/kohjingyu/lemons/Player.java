@@ -114,7 +114,7 @@ public class Player {
         return url;
 
     }
-    
+
     private void setScores(JSONObject jsonObjectScores){
         this.scores = new Scores(jsonObjectScores);
     }
