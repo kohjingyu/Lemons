@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,10 +58,19 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     public void changeLeaderboard(View view) {
+        Button button = view.findViewById(R.id.leaderboardButton);
+        if (global){
+            button.setText("friends");
+            global = false;
+            LeaderboardActivity.GetFriendsLeaderboardTask getFriendsTask = new LeaderboardActivity.GetFriendsLeaderboardTask();
+            getFriendsTask.execute();
 
-
-
-
+        } else {
+            button.setText("global");
+            global = true;
+            LeaderboardActivity.GetLeaderboardTask getFriendsTask = new LeaderboardActivity.GetLeaderboardTask();
+            getFriendsTask.execute();
+        }
     }
 
     public class GetAvatarTask extends AsyncTask<JSONArray, Void, Bitmap[]> {
@@ -128,6 +138,63 @@ public class LeaderboardActivity extends AppCompatActivity {
                 boolean success = JSONresponse.getBoolean("success");
                 if (success) {
                     leaderboardJSONArray = JSONresponse.getJSONArray("leaderboard");
+                } else {
+                    String message = JSONresponse.getString("message");
+                    Log.i("Leaderboard", message);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return leaderboardJSONArray;
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray friendList){
+            Bitmap[] tempAvatars = generateNakedAvatars(friendList.length());
+            friendsAdapter.update(friendList,tempAvatars);
+            friendsAdapter.notifyDataSetChanged();
+
+            LeaderboardActivity.GetAvatarTask getAvatarTask = new LeaderboardActivity.GetAvatarTask();
+            getAvatarTask.execute(friendList);
+        }
+    }
+
+    public class GetFriendsLeaderboardTask extends AsyncTask<Integer, Void, JSONArray> {
+
+        @Override
+        protected JSONArray doInBackground(Integer... params){
+            String response = "";
+            try {
+                int userId = Player.getPlayer().getId();
+                URL url = new URL(BASE_URL + "/friend?userId=" + userId);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setDoInput(true);
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null) {
+                        response += line;
+                    }
+                    Log.i("Response", response);
+                } else {
+                    response = null;
+                    Log.i("HTTP", "Connection not successful");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //Processing the JSON response. Update user scores if success, if not log the error message
+            try {
+                JSONObject JSONresponse = new JSONObject(response);
+                boolean success = JSONresponse.getBoolean("success");
+                if (success) {
+                    leaderboardJSONArray = JSONresponse.getJSONArray("friends");
                 } else {
                     String message = JSONresponse.getString("message");
                     Log.i("Leaderboard", message);
