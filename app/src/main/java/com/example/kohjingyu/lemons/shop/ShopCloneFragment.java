@@ -74,6 +74,8 @@ public class ShopCloneFragment extends Fragment {
 
         level = ((ShopActivity)getParentFragment().getActivity()).getLevel();
         Log.i("level", String.valueOf(level));
+        equipments = ((ShopActivity)getParentFragment().getActivity()).getEquipments(mItemType); // get equipments for this tab
+
     }
 
     @Override
@@ -82,7 +84,6 @@ public class ShopCloneFragment extends Fragment {
         View view  = inflater.inflate(R.layout.shop_item_display_new, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setAdapter(new ImageAdapter(getContext()));
-        equipments = ((ShopActivity)getParentFragment().getActivity()).getEquipments(mItemType); // get equipments for this tab
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -156,7 +157,7 @@ public class ShopCloneFragment extends Fragment {
         }
 
         public int getCount() {
-            return mThumbIds.length;
+            return equipments.length();
         }
 
         public Object getItem(int position) {

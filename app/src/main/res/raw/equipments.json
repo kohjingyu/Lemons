@@ -2,8 +2,8 @@
 {
   "hat": [
     {
-      "id": 1000003,
-      "name": "Scream Mask"
+      "id": 1004997,
+      "name": "Refreshing Lemon Hat"
     },
     {
       "id": 1001112,
@@ -24,12 +24,25 @@
     {
       "id": 1002458,
       "name": "Horoscope Hat (Aries)"
+    },
+    {
+      "id": 1001024,
+      "name": "Diamond Tiara"
+    },
+    {
+      "id": 1002077,
+      "name": "Blue Flight Headgear"
+    },
+    {
+      "id": 1000003,
+      "name": "Scream Mask"
     }
+
   ],
   "top": [
     {
-      "id": 1042343,
-      "name": "Black Hip Hop"
+      "id": 1012540,
+      "name": "Lemon Popsicle"
     },
     {
       "id": 1040001,
@@ -50,12 +63,24 @@
     {
       "id": 1042263,
       "name": "Funky Jumper"
+    },
+    {
+      "id": 1042343,
+      "name": "Black Hip Hop"
+    },
+    {
+      "id": 1042046,
+      "name": "White Casual Suit"
+    },
+    {
+      "id": 1042255,
+      "name": "Eagle Eye Dunwitch Robe"
     }
   ],
   "bottom": [
     {
-      "id": 1060031,
-      "name": "Blue Pao Bottom"
+      "id": 1053208,
+      "name": "Refreshing Lemon Outfit"
     },
     {
       "id": 1060103,
@@ -76,12 +101,24 @@
     {
       "id": 1061110,
       "name": "Pink Training Shorts"
+    },
+    {
+      "id": 1060031,
+      "name": "Blue Pao Bottom"
+    },
+    {
+      "id": 1062084,
+      "name": "Jewel Chain Jeans"
+    },
+    {
+      "id": 1061210,
+      "name": "Check Skirt"
     }
   ],
   "shoes": [
     {
-      "id": 1070060,
-      "name": "Kristoff Shoes"
+      "id": 1071100,
+      "name": "Lemon Shoes"
     },
     {
       "id": 1072233,
@@ -102,6 +139,18 @@
     {
       "id": 1072660,
       "name": "Maple Amethysian Shoes"
+    },
+    {
+      "id": 1070060,
+      "name": "Kristoff Shoes"
+    },
+    {
+      "id": 1072824,
+      "name": "Angel Wing Shoes"
+    },
+    {
+      "id": 1072633,
+      "name": "GM Haku's Pirate Shoes"
     }
   ],
   "mount": [
@@ -128,6 +177,18 @@
     {
       "id": 1902049,
       "name": "Napoleon Mount"
+    },
+    {
+      "id": 1932061,
+      "name": "Rabbit Rickshaw"
+    },
+    {
+      "id": 1932071,
+      "name": "Spirit Viking"
+    },
+    {
+      "id": 1902007,
+      "name": "Shinjo"
     }
   ]
 }

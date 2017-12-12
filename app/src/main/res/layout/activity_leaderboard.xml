@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.example.kohjingyu.lemons.LeaderboardActivity">
 
+    <Button
+        android:layout_width="64dp"
+        android:layout_height="32dp"
+        app:layout_constraintRight_toRightOf="@id/wood"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="Global"
+        android:background="@drawable/woodblock"/>
+
+
     <ImageView
         android:id="@+id/yellow"
         android:layout_width="0dp"
