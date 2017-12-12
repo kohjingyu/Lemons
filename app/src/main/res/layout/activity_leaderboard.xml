@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.kohjingyu.lemons.LeaderboardActivity">
 
-
     <ImageView
         android:id="@+id/yellow"
         android:layout_width="0dp"
