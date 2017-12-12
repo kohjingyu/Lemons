@@ -13,7 +13,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
         android:text="Global"
-        android:background="@drawable/woodblock"/>
+        android:background="@drawable/woodblockbg"
+        android:onClick="changeLeaderboard"/>
 
 
     <ImageView

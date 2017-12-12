@@ -5,8 +5,8 @@ package com.example.kohjingyu.lemons;
  */
 
 import android.content.Context;
-import android.icu.text.SimpleDateFormat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,14 +74,15 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
             int activityScore = activity.getScore();
             String activityRemarks = activity.getRemarks();
             Timestamp timestamp = activity.getTimestamp();
-            String timestampStr = String.format("On %1$TD at %1$TT", timestamp);
+            String timestampStr = String.format("on %1$TD at %1$TT", timestamp);
+            Log.i("TIMESTAMP", timestampStr);
             userInformationTextView.setText(activityName + " (" + timestampStr + ")" + "\n" + activityScore + " " + activityRemarks);
             String msg="";
 
             if(activityName.equals("academics")) {
                 potion.setImageResource(R.drawable.acadspotion);
                 activityName = ACADEMICS;
-                msg =String.format("(%s at %s) %s: %s \n", activityName, timestamp, activityRemarks, activityScore);
+                msg =String.format("(%s %s) %s: %s \n", activityName, timestampStr, activityRemarks, activityScore);
                 if(activityScore<=2) msg += "Don't worry, there's time to buck up!";
                 else if(activityScore<=4) msg+= "Keep it up!";
                 else msg += "Well done!!!!!";
@@ -89,7 +90,7 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
             if(activityName.equals("fitness")) {
                 potion.setImageResource(R.drawable.fitnesspotion);
                 activityName = FITNESS;
-                msg =String.format("(%s at %s) %s: %s\n", activityName, timestamp, activityRemarks, activityScore);
+                msg =String.format("(%s %s) %s: %s\n", activityName, timestampStr, activityRemarks, activityScore);
                 if(activityScore>=1000000) msg += "You're a fitspo!!";
                 else if(activityScore>=10000&&activityScore<1000000) msg+= "Keep it up!";
                 else msg += "Walk more please, couch potato.";
@@ -97,12 +98,12 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
             if(activityName.equals("diet")) {
                 potion.setImageResource(R.drawable.dietpotion);
                 activityName = DIET;
-                msg =String.format("(%s at %s) %s: %s\n", activityName, timestamp, activityRemarks, activityScore);
+                msg =String.format("(%s %s) %s: %s\n", activityName, timestampStr, activityRemarks, activityScore);
             }
             if(activityName.equals("mentalWellness")) {
                 potion.setImageResource(R.drawable.mentalpotion);
                 activityName = MENTAL;
-                msg =String.format("(%s at %s) %s\n", activityName, timestamp, activityRemarks);
+                msg =String.format("(%s %s) %s\n", activityName, timestampStr, activityRemarks);
                 msg += "You do you!";
             }
 

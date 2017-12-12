@@ -3,11 +3,12 @@ package com.example.kohjingyu.lemons;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +16,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -46,6 +46,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private LeaderboardAdapter friendsAdapter;
     public final String BASE_URL = "http://devostrum.no-ip.info:12345";
     private JSONArray leaderboardJSONArray;
+    private boolean global = true;
 
     private Bitmap[] generateNakedAvatars(int numberOfAvatars){
         Bitmap[] bitmaps = new Bitmap[numberOfAvatars];
@@ -53,6 +54,13 @@ public class LeaderboardActivity extends AppCompatActivity {
             bitmaps[i] = BitmapFactory.decodeResource(getResources(),R.drawable.avatar);
         }
         return bitmaps;
+    }
+
+    public void changeLeaderboard(View view) {
+
+
+
+
     }
 
     public class GetAvatarTask extends AsyncTask<JSONArray, Void, Bitmap[]> {
