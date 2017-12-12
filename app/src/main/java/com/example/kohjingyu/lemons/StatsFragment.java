@@ -101,7 +101,7 @@ public class StatsFragment extends Fragment {
         addFriendButton = view.findViewById(R.id.addfriendbutton);
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { //TODO check db
+            public void onClick(View view) {
                 addFriend addfriend = new addFriend();
                 addfriend.execute();
             }

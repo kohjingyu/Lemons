@@ -72,7 +72,6 @@ public class ShopActivity extends AppCompatActivity implements ShopCloneFragment
 
     //This function is called when an item is clicked
     public void addEquipmentToAvatar(String type, int equipmentId) {
-        //TODO link this function to url builder to change the image
         equipped.put(type, equipmentId);
         String requestURLString = urlEquipmentBuilder();
         try {
