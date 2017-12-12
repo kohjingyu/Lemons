@@ -9,7 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,15 +58,15 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     public void changeLeaderboard(View view) {
-        Button button = view.findViewById(R.id.leaderboardButton);
+        ImageButton imageButton= view.findViewById(R.id.leaderboardButton);
         if (global){
-            button.setText("friends");
+            imageButton.setImageResource(R.drawable.leaderfriendsbutton);
             global = false;
             LeaderboardActivity.GetFriendsLeaderboardTask getFriendsTask = new LeaderboardActivity.GetFriendsLeaderboardTask();
             getFriendsTask.execute();
 
         } else {
-            button.setText("global");
+            imageButton.setImageResource(R.drawable.leaderglobalbutton);
             global = true;
             LeaderboardActivity.GetLeaderboardTask getFriendsTask = new LeaderboardActivity.GetLeaderboardTask();
             getFriendsTask.execute();
