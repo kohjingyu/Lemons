@@ -14,7 +14,7 @@
         android:allowBackup="true"
         android:icon="@drawable/lemonicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/lemonicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

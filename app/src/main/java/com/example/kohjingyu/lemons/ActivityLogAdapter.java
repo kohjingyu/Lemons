@@ -5,23 +5,16 @@ package com.example.kohjingyu.lemons;
  */
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.icu.text.SimpleDateFormat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 
 public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.ActivityViewHolder> {
@@ -81,6 +74,8 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
             int activityScore = activity.getScore();
             String activityRemarks = activity.getRemarks();
             Timestamp timestamp = activity.getTimestamp();
+            String timestampStr = String.format("On %1$TD at %1$TT", timestamp);
+            userInformationTextView.setText(activityName + " (" + timestampStr + ")" + "\n" + activityScore + " " + activityRemarks);
             String msg="";
 
             if(activityName.equals("academics")) {
