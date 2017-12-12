@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.kohjingyu.lemons.LeaderboardActivity">
 
-    <Button
-        android:layout_width="64dp"
-        android:layout_height="32dp"
-        app:layout_constraintRight_toRightOf="@id/wood"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:text="Global"
-        android:background="@drawable/woodblockbg"
-        android:onClick="changeLeaderboard"/>
-
 
     <ImageView
         android:id="@+id/yellow"
@@ -52,6 +42,17 @@
         app:layout_constraintStart_toStartOf="@+id/wood"
         app:layout_constraintTop_toTopOf="@+id/wood" />
 
+    <ImageButton
+        android:id="@+id/leaderboardButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="changeLeaderboard"
+        android:src="@drawable/leaderglobalbutton"
+        app:layout_constraintLeft_toLeftOf="@id/wood"
+        app:layout_constraintRight_toRightOf="@id/wood"
+        app:layout_constraintTop_toBottomOf="@id/imageView3"
+        android:background="@android:color/transparent"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friends_recyclerView"
         android:layout_width="0dp"
@@ -60,6 +61,8 @@
         app:layout_constraintBottom_toBottomOf="@id/wood"
         app:layout_constraintEnd_toEndOf="@+id/wood"
         app:layout_constraintStart_toStartOf="@+id/wood"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardButton" >
+
+    </android.support.v7.widget.RecyclerView>
 
 </android.support.constraint.ConstraintLayout>
