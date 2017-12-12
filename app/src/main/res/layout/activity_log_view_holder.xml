@@ -4,17 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="@dimen/fab_margin_small"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/friendsViewHolderBackground"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/friendgrid"
+        android:src="@drawable/logbg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/potion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/acadspotion"
+        app:layout_constraintBottom_toBottomOf="@+id/friendsViewHolderBackground"
+        app:layout_constraintLeft_toLeftOf="@+id/friendsViewHolderBackground"
+        app:layout_constraintTop_toTopOf="@+id/friendsViewHolderBackground"
+        android:padding="@dimen/fab_margin_small"/>
 
     <TextView
         android:id="@+id/viewholder_textview"
@@ -22,14 +33,13 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:text="Activity here"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/friendsViewHolderBackground"
-        app:layout_constraintEnd_toEndOf="@+id/friendsViewHolderBackground"
-        app:layout_constraintStart_toStartOf="@+id/friendsViewHolderBackground"
+        app:layout_constraintLeft_toRightOf="@id/potion"
+        app:layout_constraintRight_toRightOf="@id/friendsViewHolderBackground"
         app:layout_constraintTop_toTopOf="@+id/friendsViewHolderBackground" />
 
 
