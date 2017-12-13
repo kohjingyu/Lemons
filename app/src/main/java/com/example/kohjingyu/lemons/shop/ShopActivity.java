@@ -41,6 +41,7 @@ public class ShopActivity extends AppCompatActivity implements ShopCloneFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
         equipments = loadJSON(R.raw.equipments);
+        int userId = Player.getPlayer().getId();
 
         avatarName = findViewById(R.id.username);
         avatarName.setText(Player.getPlayer().getUsername());
@@ -52,7 +53,7 @@ public class ShopActivity extends AppCompatActivity implements ShopCloneFragment
         fragmentTransaction.commit();
         equipped = new HashMap<>();
         loadAvatar();
-        SharedPreferences sharedPreferences = getSharedPreferences("Milestone", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Milestone" + userId, MODE_PRIVATE);
         level = sharedPreferences.getInt(LEVEL,1);
     }
 

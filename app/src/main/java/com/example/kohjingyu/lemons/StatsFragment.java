@@ -176,7 +176,7 @@ public class StatsFragment extends Fragment {
 
         if(bool){
 
-            SharedPreferences pref = getActivity().getSharedPreferences("Milestone",Context.MODE_PRIVATE);
+            SharedPreferences pref = getActivity().getSharedPreferences("Milestone" + userId,Context.MODE_PRIVATE);
             int previousLevel = pref.getInt(LEVEL, 1);
             if(tempLevel>previousLevel){
                 LevelUpAlertDialogFragment alertDialogFragment = new LevelUpAlertDialogFragment();
@@ -206,7 +206,7 @@ public class StatsFragment extends Fragment {
         String categoryLevelMessage = String.format("%s (Level %s): ", category, milestone+1);
         categoryLevel.setText(categoryLevelMessage);
 
-        SharedPreferences pref = getActivity().getSharedPreferences("Milestone",Context.MODE_PRIVATE);
+        SharedPreferences pref = getActivity().getSharedPreferences("Milestone" + userId,Context.MODE_PRIVATE);
         SharedPreferences.Editor edt = pref.edit();
         int previousMilestone = pref.getInt(category, 1);
         Log.i("Angelia", category + " prev milestone: " + previousMilestone);
